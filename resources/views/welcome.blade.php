@@ -86,14 +86,14 @@
     }
 
     .form-box input:focus {
-      border-color: #0077cc;
+      border-color: #3ea290;
       outline: none;
-      box-shadow: 0 0 5px #0077cc;
+      box-shadow: 0 0 5px #3ea290;
     }
 
     .form-box button {
       padding: 16px;
-      background-color: #005eff;
+      background-color:#3ea290;
       color: #fff;
       border: none;
       border-radius: 6px;
@@ -102,7 +102,7 @@
     }
 
     .form-box button:hover {
-      background-color: #004ed6;
+      background-color: #3ea290;
     }
   </style>
 </head>

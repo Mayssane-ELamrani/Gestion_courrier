@@ -5,131 +5,138 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Connexion - CMSS</title>
   <style>
-    body {
+    body, html {
       margin: 0;
       padding: 0;
+      width: 100%;
+      height: 100%;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom right, #e1f5f4, #f5fafa);
-      height: 100vh;
+    }
+
+    .main-container {
+      display: flex;
+      height: 100%;
+      width: 100%;
+    }
+
+    .left-side {
+      flex: 1;
+      background: url('{{ asset('images/background.jpg') }}') no-repeat center center;
+      background-size: cover;
+    }
+
+    .right-side {
+      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
+      background: linear-gradient(to right, #e1f5f4, #f5fafa);
     }
 
-    .container {
-      background: white;
-      width: 90%;
-      max-width: 480px;
-      padding: 40px 30px 40px 30px;
-      border-radius: 15px;
+    .form-box {
+      background: #ffffff;
+      padding: 60px 40px;
+      border-radius: 8px;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 600px;
+      height: 80%;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      justify-content: center;
+      position: relative;
     }
 
-    .header {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      margin-bottom: 10px;
-    }
-
-    .logo {
-      width: 50px;
-      height: 50px;
+    .form-box .logo {
+      position: absolute;
+      top: 30px;
+      right: 50px;
+      width: 120px;
+      height: 120px;
       object-fit: contain;
     }
 
-    .title {
-      color: #00695c;
-      font-weight: bold;
-      font-size: 28px;
-      user-select: none;
-    }
-
-    .subtitle {
-      color: #333;
-      font-size: 18px;
+    .form-box h1 {
       text-align: center;
-      margin-bottom: 25px;
-      user-select: none;
+      color: #0a3d3f;
+      font-size: 30px;
+      margin-bottom: 10px;
+      margin-top: 40px;
     }
 
-    form {
+    .form-box h3 {
+      text-align: center;
+      font-size: 20px;
+      margin-bottom: 30px;
+      font-weight: bold;
+      color: #004d40;
+    }
+
+    .form-box form {
       display: flex;
       flex-direction: column;
       gap: 15px;
     }
 
-    input {
-      width: 100%;
-      padding: 15px;
-      border-radius: 8px;
+    .form-box input {
+      padding: 16px;
       border: 1px solid #ccc;
+      border-radius: 6px;
       font-size: 16px;
-      box-sizing: border-box;
     }
 
-    input:focus {
+    .form-box input:focus {
       border-color: #0077cc;
       outline: none;
       box-shadow: 0 0 5px #0077cc;
     }
 
-    .btn {
-      width: 100%;
-      padding: 15px;
-      background-color: #0077cc;
-      color: white;
+    .form-box button {
+      padding: 16px;
+      background-color: #005eff;
+      color: #fff;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       font-size: 16px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
     }
 
-    .btn:hover {
-      background-color: #005fa3;
-    }
-
-    .forgot {
-      text-align: right;
-      margin-top: 10px;
-    }
-
-    .forgot a {
-      text-decoration: none;
-      color: #0077cc;
-      font-size: 14px;
-    }
-
-    .forgot a:hover {
-      text-decoration: underline;
+    .form-box button:hover {
+      background-color: #004ed6;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
+
+<div class="main-container">
+  <!-- Partie gauche avec image -->
+  <div class="left-side"></div>
+
+  <!-- Partie droite avec formulaire -->
+  <div class="right-side">
+    <div class="form-box">
+      <!-- ✅ Logo en haut à droite, agrandi -->
       <img src="{{ asset('images/LOGO_CMSS_ONEE_NEW-13.png') }}" alt="Logo CMSS" class="logo" />
-      <div class="title" id="yearTitle">CMSS</div>
+
+      <h1>Gestion Courrier</h1>
+      <!-- ✅ CMSS + Année dynamique -->
+      <h3 id="yearTitle">CMSS-2025</h3>
+
+      <form method="POST" action="{{ route('login') }}">
+        @csrf
+        <input type="text" name="text" placeholder="Matricule" required autofocus />
+        <input type="password" name="password" placeholder="Mot de passe" required />
+        <button type="submit">Se connecter</button>
+      </form>
     </div>
-    <div class="subtitle">Gestion Courrier</div>
+  </div>
+</div>
 
-    <form method="POST" action="{{ route('login') }}">
-      @csrf
-      <input type="text" name="text" placeholder="Matricule" required autofocus />
-      <input type="password" name="password" placeholder="Mot de passe" required />
-      <button type="submit" class="btn">Connexion</button>
-    </form>
+<!-- ✅ Script pour mettre CMSS-année dynamique -->
+<script>
+  const year = new Date().getFullYear();
+  document.getElementById('yearTitle').innerText = CMSS-${year};
+</script>
 
-   
-
-  <script>
-    // Affiche CMSS-année courante automatiquement
-    const year = new Date().getFullYear();
-    document.getElementById('yearTitle').innerText = `CMSS-${year}`;
-  </script>
 </body>
 </html>

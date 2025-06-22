@@ -2,20 +2,21 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\cmssController;
+use App\Http\Controllers\cmcasController;
+use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('acceuil');
 });
+Route::post('/acceuil', [AuthController::class, 'login'])->name('acceuil.login');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/choix_espace', function () {
+    return view('profile.partials.choix_espace');
+})->name('choix.espace');
+
+Route::get('/cmss', [cmssController::class, 'index'])->name('espace.cmss');
+Route::get('/cmcas', [cmcasController::class, 'index'])->name('espace.cmcas');
 
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
 
-require __DIR__.'/auth.php';

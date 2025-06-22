@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+ 
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Connexion - CMSS</title>
@@ -10,7 +12,7 @@
       padding: 0;
       width: 100%;
       height: 100%;
-      font-family: 'Segoe UI', sans-serif;
+    font-family: 'Playfair Display', serif;
     }
 
     .main-container {
@@ -115,9 +117,11 @@
       <img src="{{ asset('images/LOGO_CMSS_ONEE_NEW-13.png') }}" alt="Logo CMSS" class="logo" />
 
       <h1>Gestion Courrier</h1>
+     {{-- <x-salutation/> --}}
       <h3 id="yearTitle">CMSS-2025</h3>
+   
 
-      <form method="POST" action="{{ route('login') }}">
+      <form method="POST" action="{{ route('acceuil.login') }}">
         @csrf
         <input type="text" name="text" placeholder="Matricule" required autofocus />
         <input type="password" name="password" placeholder="Mot de passe" required />
@@ -128,8 +132,8 @@
 </div>
 <script>
   const year = new Date().getFullYear();
-  document.getElementById('yearTitle').innerText = `CMSS-${year}`;
+  document.getElementById('yearTitle').innerText = CMSS-${year};
 </script>
 
 </body>
-</html>
+</html> 

@@ -109,17 +109,12 @@
 <body>
 
 <div class="main-container">
-  <!-- Partie gauche avec image -->
   <div class="left-side"></div>
-
-  <!-- Partie droite avec formulaire -->
   <div class="right-side">
     <div class="form-box">
-      <!-- ✅ Logo en haut à droite, agrandi -->
       <img src="{{ asset('images/LOGO_CMSS_ONEE_NEW-13.png') }}" alt="Logo CMSS" class="logo" />
 
       <h1>Gestion Courrier</h1>
-      <!-- ✅ CMSS + Année dynamique -->
       <h3 id="yearTitle">CMSS-2025</h3>
 
       <form method="POST" action="{{ route('login') }}">
@@ -131,11 +126,9 @@
     </div>
   </div>
 </div>
-
-<!-- ✅ Script pour mettre CMSS-année dynamique -->
 <script>
   const year = new Date().getFullYear();
-  document.getElementById('yearTitle').innerText = CMSS-${year};
+  document.getElementById('yearTitle').innerText = `CMSS-${year}`;
 </script>
 
 </body>

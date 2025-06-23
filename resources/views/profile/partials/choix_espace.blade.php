@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Choix d'espace - CMSS</title>
 
-  <!-- Fonts & Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
 
@@ -65,7 +64,6 @@
       box-shadow: 0 0 8px rgba(255,255,255,0.6);
     }
 
-    /* Nouveau style pour le nom utilisateur avec fond coloré */
     .sidebar .username {
       background-color: #2a7a6f;
       padding: 12px 20px;
@@ -145,8 +143,8 @@
       gap: 30px;
     }
 
-    .option-tile {
-      background: #3ea290;
+    .option-tile.identique {
+      background: #4AB9A7;
       color: white;
       padding: 25px;
       border-radius: 12px;
@@ -158,19 +156,15 @@
       cursor: pointer;
     }
 
-    .option-tile:hover {
-      background-color: #2a7a6f;
+    .option-tile.identique:hover {
+      background-color: #3AA090;
       transform: translateY(-4px);
     }
 
-    .option-tile a {
+    .option-tile.identique a {
       color: white;
       text-decoration: none;
       display: block;
-    }
-
-    .option-tile.cmcas {
-      background-color: #5cb85c;
     }
 
     footer {
@@ -205,46 +199,39 @@
 </head>
 <body>
 
-  <!-- Bouton Menu -->
   <button class="menu-toggle" id="menuToggleBtn" aria-label="Toggle menu">
     <i class="bi bi-list"></i>
   </button>
 
-  <!-- Menu latéral -->
   <div class="sidebar" id="sidebar">
     <img src="{{ asset('images/profile.jpeg') }}" alt="Photo profil" class="profile-pic" />
     <div class="username">{{ Auth::user()->name }}</div>
     <a href="#"><i class="bi bi-person-circle me-2"></i> Mon Profil</a>
-    <a href="{{ route('logout') }}"
-       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-       <i class="bi bi-box-arrow-right me-2"></i> Déconnexion
+    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+      <i class="bi bi-box-arrow-right me-2"></i> Déconnexion
     </a>
-
     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
       @csrf
     </form>
   </div>
 
-  <!-- Contenu principal -->
   <div class="content" id="content">
     <div class="choice-box">
       <img src="{{ asset('images/LOGO_CMSS_ONEE_NEW-13.png') }}" alt="Logo CMSS" class="logo" />
       <h1>Choisissez votre espace</h1>
       <h3>CMSS-<span id="year"></span></h3>
-
       <div class="options">
-        <div class="option-tile">
+        <div class="option-tile identique">
           <a href="{{ route('espace.cmss') }}">
-            <i class="bi bi-building me-2"></i> Espace CMSS
+            <i class="bi bi-building-fill me-2"></i> Espace CMSS
           </a>
         </div>
-        <div class="option-tile cmcas">
+        <div class="option-tile identique">
           <a href="{{ route('espace.cmcas') }}">
-            <i class="bi bi-bank me-2"></i> Espace CMCAS
+            <i class="bi bi-bank2 me-2"></i> Espace CMCAS
           </a>
         </div>
       </div>
-
       <footer>© <span id="footerYear"></span> CMSS - Tous droits réservés</footer>
     </div>
   </div>
@@ -259,7 +246,6 @@
       content.classList.toggle('shifted');
     });
 
-    // Fermer le menu si on clique en dehors de la sidebar
     document.addEventListener('click', (e) => {
       const isClickInsideSidebar = sidebar.contains(e.target);
       const isClickOnToggleBtn = menuToggleBtn.contains(e.target);

@@ -13,9 +13,6 @@ Route::get('/', function () {
 });
 Route::post('/acceuil', [AuthController::class, 'login'])->name('acceuil.login');
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/choix_espace', function () {
     return view('profile.partials.choix_espace');
@@ -27,6 +24,13 @@ Route::get('/cmss', [cmssController::class, 'index'])
 
 Route::get('/cmcas', [cmcasController::class, 'index'])
 ->middleware(['auth'])->name('espace.cmcas');
+
+
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect('/login'); 
+})->name('logout');
+
 
 
 require __DIR__.'/auth.php';

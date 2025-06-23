@@ -66,6 +66,7 @@
       margin-bottom: 5px;
       font-weight: 700;
       text-shadow: 0 0 5px rgba(62, 162, 144, 0.5);
+      padding-right: 110px; /* Espace horizontal pour éloigner du logo */
     }
 
     .form-box h3 {
@@ -132,6 +133,7 @@
 
       .form-box h1 {
         font-size: 2.2rem;
+        padding-right: 0; /* Supprimer l'espace en version mobile */
       }
 
       .form-box h3 {
@@ -176,7 +178,7 @@
 
   <script>
     const year = new Date().getFullYear();
-    document.getElementById('yearTitle').innerText = CMSS-${year};
+    document.getElementById('yearTitle').innerText = 'CMSS-' + year;
   </script>
 
 </body>

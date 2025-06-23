@@ -6,8 +6,8 @@
   <title>Choix d'espace - CMSS</title>
   <style>
     body, html {
-      margin: 0;
-      padding: 0;
+      margin: 80;
+      padding: 50;
       width: 100%;
       height: 100%;
       font-family: 'Playfair Display', serif;
@@ -98,6 +98,7 @@
     <img src="{{ asset('images/LOGO_CMSS_ONEE_NEW-13.png') }}" alt="Logo CMSS" class="logo" />
 
     <h1>Choisissez votre espace</h1>
+    <h2>Bienvenue sur le portail CMSS</h2>
     <h3 id="yearTitle">CMSS-{{ date('Y') }}</h3>
 
     <div class="options">

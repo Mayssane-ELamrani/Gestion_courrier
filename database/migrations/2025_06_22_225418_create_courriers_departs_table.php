@@ -16,12 +16,12 @@ return new class extends Migration
         $table->string('num_doc');
         $table->date('date_envoi');
         $table->string('destinataire');
-        $table->unsignedInteger('reference_arrivee')->nullable();
+        $table->string('reference_arrivee')->nullable();
 
         $table->timestamps();
 
         // Foreign key
-        $table->foreign('reference_arrivee')->references('num_ordre')->on('courriers_arrivees')->onDelete('set null');
+        $table->foreign('reference_arrivee')->references('reference')->on('courriers_arrivees')->onDelete('set null');
     });
 }
 

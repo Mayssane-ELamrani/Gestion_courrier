@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-       Schema::create('provenances', function (Blueprint $table) {
-    $table->string('code_provenance')->primary();
-    $table->enum('type', ['agent', 'etablissement']);
-    $table->timestamps();
-});
-
+        Schema::create('etats', function (Blueprint $table) {
+            $table->id();
+            $table->string('nom')->unique();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('provenances');
+        Schema::dropIfExists('etats');
     }
 };

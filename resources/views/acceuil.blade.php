@@ -169,7 +169,7 @@
 
       <form method="POST" action="{{ route('login') }}">
         @csrf
-        <input type="email" name="email" placeholder="Matricule" required autofocus />
+        <input type="email" name="email" placeholder="Email" required autofocus />
         <input type="password" name="password" placeholder="Mot de passe" required />
         <button type="submit">Se connecter</button>
       </form>

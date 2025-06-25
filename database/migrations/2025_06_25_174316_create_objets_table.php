@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-       Schema::create('agents', function (Blueprint $table) {
-    $table->string('code_provenance')->primary();
-    $table->foreign('code_provenance')->references('code_provenance')->on('provenances')->onDelete('cascade');
-    $table->string('nom');
-    $table->string('prenom');
-    $table->timestamps();
-});
-
+        Schema::create('objets', function (Blueprint $table) {
+            $table->id();
+            $table->string('nom')->unique();
+            $table->text('description');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('agents');
+        Schema::dropIfExists('objets');
     }
 };

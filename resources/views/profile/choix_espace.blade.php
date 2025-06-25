@@ -206,7 +206,7 @@
   <div class="sidebar" id="sidebar">
     <img src="{{ asset('images/profile.jpeg') }}" alt="Photo profil" class="profile-pic" />
     <div class="username">{{ Auth::user()->name }}</div>
-    <a href="#"><i class="bi bi-person-circle me-2"></i> Mon Profil</a>
+    <a href="{{ route('profil') }}"><i class="bi bi-person-circle me-2"></i> Mon Profil</a>
     <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
       <i class="bi bi-box-arrow-right me-2"></i> Déconnexion
     </a>

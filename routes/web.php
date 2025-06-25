@@ -15,8 +15,7 @@ Route::post('/acceuil', [AuthController::class, 'login'])->name('acceuil.login')
 
 
 Route::get('/choix_espace', function () {
-    return view('profile.partials.choix_espace');
-    
+    return view('profile.choix_espace');
 })->middleware(['auth'])->name('choix.espace');
 
 Route::get('/cmss', [cmssController::class, 'index'])
@@ -30,6 +29,14 @@ Route::post('/logout', function () {
     Auth::logout();
     return redirect('/login'); 
 })->name('logout');
+Route::middleware('auth')->group(function () {
+    Route::get('/profil', [App\Http\Controllers\ProfileController::class, 'index'])->name('profil');
+    Route::post('/profil/update', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profil/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password');
+    Route::post('/profil/delete', [App\Http\Controllers\ProfileController::class, 'delete'])->name('profile.delete');
+    Route::delete('/profil/destroy', [App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
 
 
 

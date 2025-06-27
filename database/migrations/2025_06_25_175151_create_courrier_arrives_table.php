@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('date_reception')->automatic();
             $table->text('annotation');
             $table->date('date_envoi');
-             $table->string('matricule');
+            $table->unsignedBigInteger('matricule');
             $table->foreign('matricule')->references('matricule')->on('personnes')->onDelete('cascade');
             $table->unsignedBigInteger('objet_id');
             $table->foreign('objet_id')->references('id')->on('objets');

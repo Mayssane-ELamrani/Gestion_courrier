@@ -21,9 +21,10 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
     'nom_complet' => 'Mayssane',
     'email' => 'mayssane@gmail.com',
-    'matricule' => '34123',
-    'password' => Hash::make('12345678'),
+    'matricule' => '20061',
+    'password' => Hash::make('2024'),
 ]);
+  
 
     }
 }

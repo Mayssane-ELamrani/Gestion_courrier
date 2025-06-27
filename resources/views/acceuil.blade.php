@@ -66,7 +66,7 @@
       margin-bottom: 5px;
       font-weight: 700;
       text-shadow: 0 0 5px rgba(62, 162, 144, 0.5);
-      padding-right: 110px; /* Espace horizontal pour éloigner du logo */
+      padding-right: 110px;
     }
 
     .form-box h3 {
@@ -85,7 +85,7 @@
       gap: 20px;
     }
 
-    input[type="email"],
+    input[type="text"],
     input[type="password"] {
       padding: 18px 20px;
       font-size: 1.1rem;
@@ -97,7 +97,7 @@
       box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
     }
 
-    input[type="email"]:focus,
+    input[type="text"]:focus,
     input[type="password"]:focus {
       outline: none;
       border-color: #00695c;
@@ -133,7 +133,7 @@
 
       .form-box h1 {
         font-size: 2.2rem;
-        padding-right: 0; /* Supprimer l'espace en version mobile */
+        padding-right: 0;
       }
 
       .form-box h3 {
@@ -141,7 +141,7 @@
         margin-bottom: 30px;
       }
 
-      input[type="email"],
+      input[type="text"],
       input[type="password"],
       button {
         font-size: 1rem;
@@ -167,9 +167,9 @@
       <h1>Gestion Courrier</h1>
       <h3 id="yearTitle">CMSS-2025</h3>
 
-      <form method="POST" action="{{ route('login') }}">
+      <form method="POST" action="{{ route('acceuil.login') }}">
         @csrf
-        <input type="email" name="email" placeholder="Email" required autofocus />
+        <input type="text" name="matricule" placeholder="Entrer votre matricule" pattern="\d{5}" maxlength="5" required autofocus />
         <input type="password" name="password" placeholder="Mot de passe" required />
         <button type="submit">Se connecter</button>
       </form>

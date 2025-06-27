@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Choix d\'espace - CMSS')
+@section('title', 'Choix de courrier - CMSS')
 
 @push('styles')
 <style>
@@ -12,6 +12,7 @@
     box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
     width: 90%;
     max-width: 900px;
+    margin: 30px auto;
   }
 
   .choice-box .logo {
@@ -28,6 +29,7 @@
     font-size: 36px;
     margin-top: 10px;
     text-align: center;
+    font-family: 'Playfair Display', serif;
   }
 
   .choice-box h3 {
@@ -35,6 +37,7 @@
     font-size: 22px;
     text-align: center;
     margin-bottom: 50px;
+    font-family: 'Inter', sans-serif;
   }
 
   .options {
@@ -79,22 +82,21 @@
 @section('content')
   <div class="choice-box">
     <img src="{{ asset('images/LOGO_CMSS_ONEE_NEW-13.png') }}" alt="Logo CMSS" class="logo" />
-    <h1>Choisissez votre espace</h1>
-    <h3>CMSS-<span id="year"></span></h3>
+    <h1>Choisissez un type de courrier</h1>
+    <h3>CMSS - <span id="year"></span></h3>
 
-   <div class="options">
-  <div class="option-tile identique">
-    <a href="{{ route('choix.courrier', ['espace' => 'cmss']) }}">
-      <i class="bi bi-building-fill me-2"></i> Espace CMSS
-    </a>
-  </div>
-  <div class="option-tile identique">
-    <a href="{{ route('choix.courrier', ['espace' => 'cmcas']) }}">
-      <i class="bi bi-bank2 me-2"></i> Espace CMCAS
-    </a>
-  </div>
-</div>
-
+    <div class="options">
+      <div class="option-tile identique">
+        <a href="{{ route('courrier.arrivee') }}">
+          <i class="bi bi-inbox-arrow-down me-2"></i> Courrier d'arrivée
+        </a>
+      </div>
+      <div class="option-tile identique">
+        <a href="{{ route('courrier.depart') }}">
+          <i class="bi bi-send-fill me-2"></i> Courrier de départ
+        </a>
+      </div>
+    </div>
 
     <footer>© <span id="footerYear"></span> CMSS - Tous droits réservés</footer>
   </div>

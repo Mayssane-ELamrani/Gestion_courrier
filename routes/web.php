@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\cmssController;
 use App\Http\Controllers\cmcasController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CourrierController;
 
 
 
@@ -15,27 +16,46 @@ Route::post('/acceuil', [AuthController::class, 'login'])->name('acceuil.login')
 
 
 Route::get('/choix_espace', function () {
-    return view('profile.choix_espace');
+    return view('profile.choix_espace'); 
 })->middleware(['auth'])->name('choix.espace');
 
-Route::get('/cmss', [cmssController::class, 'index'])
-->middleware(['auth'])->name('espace.cmss');
 
-Route::get('/cmcas', [cmcasController::class, 'index'])
-->middleware(['auth'])->name('espace.cmcas');
+
 
 
 Route::post('/logout', function () {
     Auth::logout();
     return redirect('/login'); 
 })->name('logout');
-Route::middleware('auth')->group(function () {
-    Route::get('/profil', [App\Http\Controllers\ProfileController::class, 'index'])->name('profil');
-    Route::post('/profil/update', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
-    Route::post('/profil/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password');
-    Route::post('/profil/delete', [App\Http\Controllers\ProfileController::class, 'delete'])->name('profile.delete');
-    Route::delete('/profil/destroy', [App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profil', [ProfileController::class, 'index'])->name('profile.index');
+    Route::patch('/profil', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profil/password', [ProfileController::class, 'updatePassword'])->name('password.update');
+    Route::delete('/profil', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+Route::get('/choix-courrier/{espace}', function ($espace) {
+    if (!in_array($espace, ['cmss', 'cmcas'])) {
+        abort(404);
+    }
+    return view('choix_courrier', compact('espace'));
+})->middleware('auth')->name('choix.courrier');
+
+Route::get('/courrier/{espace}/{type}', [CourrierController::class, 'index'])
+    ->middleware('auth')
+    ->name('courrier.index');
+    
+
+
+
+Route::get('/courrier/{espace}/{type}', [CourrierController::class, 'index'])->name('courrier.index');
+Route::get('/courrier/{espace}/depart', [CourrierController::class, 'depart'])->name('courrier.depart');
+
+
+Route::get('/courrier/{espace}/arrivee', [CourrierController::class, 'arrivee'])->name('courrier.arrivee');
+
+
+
 
 
 

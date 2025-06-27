@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('date_envoi');
             $table->string('destinataire');
             $table->string('reference-courrierArrive')->nullable();
-            $table->unsignedInteger('objet_id')->nullable();
+            $table->unsignedBigInteger('objet_id')->nullable();
             $table->foreign('objet_id')->references('id')->on('objets');
             $table->unsignedBigInteger('etat_id');
             $table->foreign('etat_id')->references('id')->on('etats');

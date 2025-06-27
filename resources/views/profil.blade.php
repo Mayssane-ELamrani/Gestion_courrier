@@ -1,115 +1,267 @@
 @extends('layouts.app')
-<div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg max-w-xl">
-    <section>
-        <header>
-            <h2 class="text-lg font-medium text-gray-900">Informations du profil</h2>
-            <p class="mt-1 text-sm text-gray-600">Mettez à jour votre nom et votre adresse e-mail.</p>
-        </header>
 
-        <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
-            @csrf
-            @method('patch')
+@section('title', 'Profil - CMSS')
 
-            <div>
-                <x-input-label for="name" value="Nom" />
-                <x-text-input id="name" name="name" type="text" class="mt-1 block w-full"
-                    :value="old('name', auth()->user()->name)" required autofocus autocomplete="name" />
-                <x-input-error class="mt-2" :messages="$errors->get('name')" />
-            </div>
+@push('styles')
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;500;600&display=swap');
 
-            <div>
-                <x-input-label for="email" value="Email" />
-                <x-text-input id="email" name="email" type="email" class="mt-1 block w-full"
-                    :value="old('email', auth()->user()->email)" required autocomplete="username" />
-                <x-input-error class="mt-2" :messages="$errors->get('email')" />
-            </div>
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f0f4f8;
+  }
 
-            <div class="flex items-center gap-4">
-                <x-primary-button>Sauvegarder</x-primary-button>
+  .choice-box {
+    background: white;
+    padding: 60px 50px;
+    border-radius: 20px;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 900px;
+    position: relative;
+    margin: 30px auto;
+  }
 
-                @if (session('status') === 'profile-updated')
-                    <p class="text-sm text-gray-600">{{ __('Modifications enregistrées.') }}</p>
-                @endif
-            </div>
-        </form>
-    </section>
+  .choice-box .logo {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+  }
+
+  .title-profil {
+    font-family: 'Playfair Display', serif;
+    font-size: 40px;
+    color: #0a3d3f;
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
+    position: relative;
+  }
+
+  .title-profil::after {
+    content: "";
+    width: 80px;
+    height: 3px;
+    background-color: #4AB9A7;
+    display: block;
+    margin: 10px auto 0;
+    border-radius: 2px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    color: #00796b;
+    font-size: 24px;
+    margin-top: 30px;
+    margin-bottom: 12px;
+    border-bottom: 3px solid #4AB9A7;
+    padding-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  label {
+    font-weight: 500;
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  input {
+    border: 1px solid #ccc !important;
+    padding: 10px;
+    border-radius: 8px;
+    width: 100%;
+    background-color: #f9f9f9;
+  }
+
+  input[readonly] {
+    background-color: #eaeaea;
+  }
+
+  .btn-primary {
+    background-color: #4AB9A7;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+
+  .btn-primary:hover {
+    background-color: #3AA090;
+  }
+
+  .danger-section {
+    background-color: #fff0f0;
+    border: 1px solid #e63946;
+    border-radius: 10px;
+    padding: 20px 25px;
+    margin-top: 30px;
+    color: #b00020;
+    box-shadow: 0 2px 5px rgba(230, 57, 70, 0.15);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .danger-section p {
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+
+  .btn-danger {
+    background-color: #e63946;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    display: inline-block;
+  }
+
+  .btn-danger:hover {
+    background-color: #c62839;
+    box-shadow: 0 0 10px #c62839;
+  }
+
+  .section {
+    margin-top: 40px;
+  }
+
+  .text-green-600 {
+    color: #16a34a;
+  }
+
+  @media(max-width: 768px) {
+    .choice-box {
+      padding: 30px 20px;
+      margin: 15px auto;
+    }
+
+    .choice-box .logo {
+      width: 70px;
+      height: 70px;
+    }
+
+    .title-profil {
+      font-size: 28px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      border-bottom-width: 2px;
+    }
+  }
+</style>
+@endpush
+
+@section('content')
+<div class="choice-box">
+  <img src="{{ asset('images/LOGO_CMSS_ONEE_NEW-13.png') }}" class="logo" alt="Logo CMSS" />
+  <h1 class="title-profil">👤 Mon profil</h1>
+
+
+  <div class="section">
+    <div class="section-title">Informations personnelles</div>
+    <form method="POST" action="{{ route('profile.update') }}">
+      @csrf
+      @method('patch')
+
+      <div class="form-group">
+        <label for="nom_complet">Nom complet</label>
+        <x-text-input id="nom_complet" name="nom_complet" type="text"
+          :value="old('nom_complet', auth()->user()->nom_complet)" required autofocus />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <x-text-input id="email" name="email" type="email"
+          :value="old('email', auth()->user()->email)" required />
+      </div>
+
+      <div class="form-group">
+        <label for="matricule">Matricule</label>
+        <x-text-input id="matricule" name="matricule" type="text"
+          :value="auth()->user()->matricule" readonly />
+      </div>
+
+      <button type="submit" class="btn-primary mt-3">Sauvegarder</button>
+
+      @if (session('status') === 'profile-updated')
+        <p class="text-sm text-green-600 mt-2">Modifications enregistrées.</p>
+      @endif
+    </form>
+  </div>
+
+  {{-- Mot de passe --}}
+  <div class="section">
+    <div class="section-title">Modifier le mot de passe</div>
+    <form method="POST" action="{{ route('password.update') }}">
+      @csrf
+      @method('put')
+
+      <div class="form-group">
+        <label for="current_password">Mot de passe actuel</label>
+        <x-text-input id="current_password" name="current_password" type="password" />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Nouveau mot de passe</label>
+        <x-text-input id="password" name="password" type="password" />
+      </div>
+
+      <div class="form-group">
+        <label for="password_confirmation">Confirmer le mot de passe</label>
+        <x-text-input id="password_confirmation" name="password_confirmation" type="password" />
+      </div>
+
+      <button type="submit" class="btn-primary mt-3">Mettre à jour</button>
+
+      @if (session('status') === 'password-updated')
+        <p class="text-sm text-green-600 mt-2">Mot de passe modifié avec succès.</p>
+      @endif
+    </form>
+  </div>
+
+  {{-- Supprimer le compte --}}
+  <div class="section danger-section">
+    <div class="section-title text-red-600">❗ Supprimer le compte</div>
+    <p>⚠️ Cette action est irréversible. Votre compte sera définitivement supprimé.</p>
+
+    <form method="POST" action="{{ route('profile.destroy') }}"
+          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')">
+      @csrf
+      @method('delete')
+
+      <div class="form-group">
+        <label for="delete_password">Veuillez saisir votre mot de passe pour confirmer :</label>
+        <input id="delete_password" type="password" name="password" required placeholder="Mot de passe actuel">
+      </div>
+
+      @if ($errors->userDeletion->any())
+        <div class="text-red-600 mt-2">
+          @foreach ($errors->userDeletion->all() as $error)
+            <p>{{ $error }}</p>
+          @endforeach
+        </div>
+      @endif
+
+      <button type="submit" class="btn-danger mt-3">🗑️ Supprimer mon compte</button>
+    </form>
+  </div>
 </div>
-<div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg max-w-xl">
-    <section>
-        <header>
-            <h2 class="text-lg font-medium text-gray-900">Modifier le mot de passe</h2>
-            <p class="mt-1 text-sm text-gray-600">Utilisez un mot de passe fort pour la sécurité.</p>
-        </header>
-
-        <form method="post" action="{{ route('password.update') }}" class="mt-6 space-y-6">
-            @csrf
-            @method('put')
-
-            <div>
-                <x-input-label for="current_password" value="Mot de passe actuel" />
-                <x-text-input id="current_password" name="current_password" type="password" class="mt-1 block w-full"
-                    autocomplete="current-password" />
-                <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
-            </div>
-
-            <div>
-                <x-input-label for="password" value="Nouveau mot de passe" />
-                <x-text-input id="password" name="password" type="password" class="mt-1 block w-full"
-                    autocomplete="new-password" />
-                <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
-            </div>
-
-            <div>
-                <x-input-label for="password_confirmation" value="Confirmer le mot de passe" />
-                <x-text-input id="password_confirmation" name="password_confirmation" type="password"
-                    class="mt-1 block w-full" autocomplete="new-password" />
-                <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
-            </div>
-
-            <div class="flex items-center gap-4">
-                <x-primary-button>Sauvegarder</x-primary-button>
-                @if (session('status') === 'password-updated')
-                    <p class="text-sm text-green-600">Mot de passe modifié avec succès.</p>
-                @endif
-            </div>
-        </form>
-    </section>
-</div>
-
-{{-- Suppression du compte --}}
-<div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg max-w-xl">
-    <section>
-        <header>
-            <h2 class="text-lg font-medium text-gray-900">Supprimer le compte</h2>
-            <p class="mt-1 text-sm text-gray-600">
-                Une fois supprimé, toutes vos données seront définitivement perdues.
-            </p>
-        </header>
-
-        <x-danger-button x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')">
-            Supprimer le compte
-        </x-danger-button>
-
-        <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
-            <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
-                @csrf
-                @method('delete')
-
-                <h2 class="text-lg font-medium text-gray-900">Confirmer la suppression du compte</h2>
-                <p class="mt-1 text-sm text-gray-600">Entrez votre mot de passe pour confirmer.</p>
-
-                <div class="mt-6">
-                    <x-input-label for="password" value="Mot de passe" class="sr-only" />
-                    <x-text-input id="password" name="password" type="password" class="mt-1 block w-3/4"
-                        placeholder="Mot de passe" />
-                    <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
-                </div>
-
-                <div class="mt-6 flex justify-end">
-                    <x-secondary-button x-on:click="$dispatch('close')">Annuler</x-secondary-button>
-                    <x-danger-button class="ms-3">Supprimer</x-danger-button>
-                </div>
-            </form>
-        </x-modal>
-    </section>
-</div>
+@endsection

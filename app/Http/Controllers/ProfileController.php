@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
@@ -20,12 +21,12 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255'
+            'nom_complet' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
         ]);
 
         $user->update([
-            'name' => $request->name,
+            'nom_complet' => $request->nom_complet,
             'email' => $request->email,
         ]);
 
@@ -35,30 +36,28 @@ class ProfileController extends Controller
     public function updatePassword(Request $request)
     {
         $request->validate([
-            'current_password' => 'required',
-            'new_password' => 'required|string|min:8|confirmed'
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
-        if (!Hash::check($request->current_password, Auth::user()->password)) {
-            return back()->with('error', 'Mot de passe actuel incorrect.');
-        }
+        $user = auth()->user();
+        $user->password = Hash::make($request->password);
+        $user->save();
 
-        Auth::user()->update([
-            'password' => Hash::make($request->new_password)
-        ]);
-
-        return back()->with('success', 'Mot de passe changé avec succès.');
+        return back()->with('status', 'password-updated');
     }
-    public function delete(Request $request)
+
+    public function destroy(Request $request)
     {
+        $request->validate([
+            'password' => ['required', 'current_password'],
+        ]);
+
         $user = Auth::user();
 
-        if ($request->input('confirm') === 'yes') {
-            $user->delete();
-            Auth::logout();
-            return redirect('/')->with('success', 'Votre compte a été supprimé avec succès.');
-        }
+        Auth::logout();
 
-        return back()->with('error', 'Suppression annulée.');
-    } 
+        $user->delete();
+        return redirect('/login')->with('success', 'Votre compte a été supprimé avec succès.');
+    }
 }

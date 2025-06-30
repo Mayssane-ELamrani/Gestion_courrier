@@ -29,15 +29,14 @@
       position: relative;
       width: 50vw;
       max-width: 600px;
-      height: 80vh;
-      background: linear-gradient(135deg, rgba(255 255 255 / 0.85) 0%, rgba(255 255 255 / 0.6) 100%);
+      height: auto;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.6) 100%);
       border-radius: 20px;
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
       display: flex;
       flex-direction: column;
       justify-content: center;
       padding: 60px 50px;
-      overflow: hidden;
     }
 
     .top-right-logo {
@@ -74,7 +73,7 @@
       text-align: center;
       font-size: 1.5rem;
       font-weight: 700;
-      margin-bottom: 40px;
+      margin-bottom: 20px;
       letter-spacing: 2px;
       text-shadow: 0 0 3px rgba(0, 77, 64, 0.3);
     }
@@ -124,10 +123,19 @@
       box-shadow: 0 8px 25px rgba(0, 81, 64, 0.75);
     }
 
+    .error-box {
+      background-color: #fce4e4;
+      border: 1px solid #f44336;
+      color: #d8000c;
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 0.95rem;
+    }
+
     @media (max-width: 768px) {
       .right-side {
         width: 90vw;
-        height: auto;
         padding: 40px 30px;
       }
 
@@ -138,7 +146,7 @@
 
       .form-box h3 {
         font-size: 1.2rem;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
       }
 
       input[type="text"],
@@ -160,17 +168,26 @@
 <body>
 
   <div class="right-side">
-    <!-- Logo en haut à droite -->
     <img src="{{ asset('images/LOGO_CMSS_ONEE_NEW-13.png') }}" alt="Logo CMSS" class="top-right-logo" />
 
     <div class="form-box">
       <h1>Gestion Courrier</h1>
       <h3 id="yearTitle">CMSS-2025</h3>
 
+     
+      @if ($errors->any())
+        <div class="error-box">
+          @foreach ($errors->all() as $error)
+            <p>{{ $error }}</p>
+          @endforeach
+        </div>
+      @endif
+
       <form method="POST" action="{{ route('acceuil.login') }}">
         @csrf
-        <input type="text" name="matricule" placeholder="Entrer votre matricule" pattern="\d{5}" maxlength="5" required autofocus />
+        <input type="text" name="matricule" placeholder="Entrer votre matricule" pattern="\d{5}" maxlength="5" value="{{ old('matricule') }}" required autofocus />
         <input type="password" name="password" placeholder="Mot de passe" required />
+
         <button type="submit">Se connecter</button>
       </form>
     </div>

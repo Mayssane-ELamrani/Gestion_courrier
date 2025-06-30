@@ -16,14 +16,21 @@ return new class extends Migration
             $table->string('reference')->unique();
             $table->date('date_envoi');
             $table->string('destinataire');
-            $table->string('reference-courrierArrive')->nullable();
+            $table->string('reference_courrierArrive')->nullable();
             $table->unsignedBigInteger('objet_id')->nullable();
-            $table->foreign('objet_id')->references('id')->on('objets');
+            $table->text('description_objet')->nullable();
             $table->unsignedBigInteger('etat_id');
-            $table->foreign('etat_id')->references('id')->on('etats');
             $table->unsignedBigInteger('departement_source_id');
-            $table->foreign('departement_source_id')->references('id')->on('departements');
+            $table->unsignedBigInteger('matricule');
+            $table->enum('type_espace', ['cmss', 'cmcas']);  
             $table->timestamps();
+            $table->softDeletes();
+
+            // Clés étrangères
+            $table->foreign('objet_id')->references('id')->on('objets');
+            $table->foreign('etat_id')->references('id')->on('etats');
+            $table->foreign('departement_source_id')->references('id')->on('departements');
+            $table->foreign('matricule')->references('matricule')->on('personnes')->onDelete('cascade');  // <-- clé étrangère matricule
         });
     }
 

@@ -207,7 +207,7 @@
     </form>
   </div>
 
-  {{-- Mot de passe --}}
+ 
   <div class="section">
     <div class="section-title">Modifier le mot de passe</div>
     <form method="POST" action="{{ route('password.update') }}">
@@ -237,7 +237,7 @@
     </form>
   </div>
 
-  {{-- Supprimer le compte --}}
+
   <div class="section danger-section">
     <div class="section-title text-red-600">❗ Supprimer le compte</div>
     <p>⚠️ Cette action est irréversible. Votre compte sera définitivement supprimé.</p>

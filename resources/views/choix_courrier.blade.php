@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@include('components.logo')
 
 @section('title', 'Choix du courrier - ' . strtoupper($espace))
 

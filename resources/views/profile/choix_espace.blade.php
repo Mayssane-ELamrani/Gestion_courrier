@@ -93,6 +93,13 @@
       <i class="bi bi-bank2 me-2"></i> Espace CMCAS
     </a>
   </div>
+  @if(auth()->user()->isAdmin())
+  <div class="option-tile identique">
+    <a href="{{ route('gestion.admin') }}">
+      <i class="bi bi-bank2 me-2"></i>🔐Gestion administrative
+    </a>
+  </div>
+@endif
 </div>
 
 

@@ -5,11 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>@yield('title', 'CMSS')</title>
 
-  <!-- Police + icônes -->
+  
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
 
-  <!-- Styles globaux + sidebar -->
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body, html {
@@ -61,7 +60,7 @@
   @stack('styles')
 </head>
 <body>
-  <!-- Menu et sidebar -->
+ 
   <button class="menu-toggle" id="menuToggleBtn" aria-label="Toggle menu">
     <i class="bi bi-list"></i>
   </button>
@@ -78,12 +77,13 @@
     </form>
   </div>
 
-  <!-- Contenu de la page -->
+ 
   <div class="content" id="content">
     @yield('content')
   </div>
 
-  <!-- Script menu sidebar -->
+  
+  
   <script>
     const menuToggleBtn = document.getElementById('menuToggleBtn');
     const sidebar = document.getElementById('sidebar');

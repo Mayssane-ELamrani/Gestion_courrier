@@ -8,6 +8,7 @@ class Objet extends Model
 {
     protected $fillable = [
         'nom',
+        'description',
     ];
 
     public function courriersArrives()

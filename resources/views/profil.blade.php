@@ -3,6 +3,9 @@
 @section('title', 'Profil - CMSS')
 
 @push('styles')
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;500;600&display=swap');
 
@@ -102,42 +105,6 @@
     background-color: #3AA090;
   }
 
-  .danger-section {
-    background-color: #fff0f0;
-    border: 1px solid #e63946;
-    border-radius: 10px;
-    padding: 20px 25px;
-    margin-top: 30px;
-    color: #b00020;
-    box-shadow: 0 2px 5px rgba(230, 57, 70, 0.15);
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .danger-section p {
-    margin-bottom: 20px;
-    font-weight: 600;
-  }
-
-  .btn-danger {
-    background-color: #e63946;
-    color: white;
-    padding: 12px 25px;
-    border-radius: 12px;
-    border: none;
-    font-weight: 700;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    display: inline-block;
-  }
-
-  .btn-danger:hover {
-    background-color: #c62839;
-    box-shadow: 0 0 10px #c62839;
-  }
-
   .section {
     margin-top: 40px;
   }
@@ -172,8 +139,11 @@
 @section('content')
 <div class="choice-box">
   <img src="{{ asset('images/LOGO_CMSS_ONEE_NEW-13.png') }}" class="logo" alt="Logo CMSS" />
-  <h1 class="title-profil">👤 Mon profil</h1>
+  
 
+  <h1 class="title-profil">
+    <i class="fas fa-user" style="margin-right: 10px;"></i> Mon profil
+  </h1>
 
   <div class="section">
     <div class="section-title">Informations personnelles</div>
@@ -207,7 +177,6 @@
     </form>
   </div>
 
- 
   <div class="section">
     <div class="section-title">Modifier le mot de passe</div>
     <form method="POST" action="{{ route('password.update') }}">
@@ -234,33 +203,6 @@
       @if (session('status') === 'password-updated')
         <p class="text-sm text-green-600 mt-2">Mot de passe modifié avec succès.</p>
       @endif
-    </form>
-  </div>
-
-
-  <div class="section danger-section">
-    <div class="section-title text-red-600">❗ Supprimer le compte</div>
-    <p>⚠️ Cette action est irréversible. Votre compte sera définitivement supprimé.</p>
-
-    <form method="POST" action="{{ route('profile.destroy') }}"
-          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')">
-      @csrf
-      @method('delete')
-
-      <div class="form-group">
-        <label for="delete_password">Veuillez saisir votre mot de passe pour confirmer :</label>
-        <input id="delete_password" type="password" name="password" required placeholder="Mot de passe actuel">
-      </div>
-
-      @if ($errors->userDeletion->any())
-        <div class="text-red-600 mt-2">
-          @foreach ($errors->userDeletion->all() as $error)
-            <p>{{ $error }}</p>
-          @endforeach
-        </div>
-      @endif
-
-      <button type="submit" class="btn-danger mt-3">🗑️ Supprimer mon compte</button>
     </form>
   </div>
 </div>

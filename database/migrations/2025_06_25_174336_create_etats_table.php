@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('etats', function (Blueprint $table) {
             $table->id();
             $table->string('nom')->unique();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -24,5 +25,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('etats');
+        Schema::table('etats', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };

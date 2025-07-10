@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nom')->unique();
             $table->string('responsable')->nullable();
+            $table->softDeletes(); 
             $table->timestamps();
         });
     }
@@ -25,5 +26,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('departements');
+        Schema::table('departements', function (Blueprint $table) {
+            $table->dropSoftDeletes(); 
+        });
     }
 };

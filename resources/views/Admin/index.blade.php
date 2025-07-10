@@ -271,7 +271,7 @@
                 <form method="POST" action="{{ route('admin.departement.delete', $d->id) }}" style="display:inline">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="delete-btn" onclick="return confirm('Supprimer ce département ?')">❌</button>
+                    <button type="submit" class="delete-btn" onclick="return confirm('Supprimer ce département ?')">Supprimer </button>
                 </form>
             </li>
             @endforeach
@@ -294,7 +294,7 @@
                 <form method="POST" action="{{ route('admin.objet.delete', $o->id) }}" style="display:inline">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="delete-btn" onclick="return confirm('Supprimer cet objet ?')">❌</button>
+                    <button type="submit" class="delete-btn" onclick="return confirm('Supprimer cet objet ?')">Supprimer </button>
                 </form>
             </li>
             @endforeach

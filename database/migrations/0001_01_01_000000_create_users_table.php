@@ -19,6 +19,7 @@ return new class extends Migration
             $table->enum('role', ['admin', 'user'])->default('user');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();
         });
@@ -47,5 +48,8 @@ return new class extends Migration
         Schema::dropIfExists('personnes');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+         Schema::table('personnes', function (Blueprint $table) {
+            $table->dropSoftDeletes(); 
+        });
     }
 };

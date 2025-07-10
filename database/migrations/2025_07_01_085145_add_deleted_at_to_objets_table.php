@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('provenances', function (Blueprint $table) {
-            $table->id();
-             $table->enum('type', ['agent', 'etablissement']);
-             $table->softDeletes();
-            $table->timestamps();
+        Schema::table('objets', function (Blueprint $table) {
+            //
         });
     }
 
@@ -24,9 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('provenances');
-        Schema::table('provenances', function (Blueprint $table) {
-            $table->dropSoftDeletes();
+        Schema::table('objets', function (Blueprint $table) {
+            //
         });
     }
 };

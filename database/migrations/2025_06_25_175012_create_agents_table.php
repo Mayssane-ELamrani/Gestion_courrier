@@ -12,14 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('agents', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->primary();
-            $table->string('nom')->unique();
+            $table->id(); // auto-increment ID, mieux que unsignedBigInteger + primary
+            $table->string('nom');
             $table->string('prenom')->nullable();
             $table->string('matricule')->unique();
+
             $table->foreignId('provenance_id')
-                ->constrained('provenances')
-                ->onDelete('cascade');
-            $table->timestamps();
+                  ->constrained('provenances')
+                  ->onDelete('cascade');
+
+            $table->softDeletes(); // Ajoute deleted_at
+            $table->timestamps();  // created_at et updated_at
         });
     }
 

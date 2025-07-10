@@ -12,12 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('etablissements', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->primary();
+            $table->id(); // auto-increment ID
             $table->string('raison_sociale');
-             $table->foreignId('provenance_id')
-                ->constrained('provenances')
-                ->onDelete('cascade');
-            $table->timestamps();
+            
+            $table->foreignId('provenance_id')
+                  ->constrained('provenances')
+                  ->onDelete('cascade');
+
+            $table->softDeletes(); // Pour suppression logique
+            $table->timestamps();  // created_at et updated_at
         });
     }
 

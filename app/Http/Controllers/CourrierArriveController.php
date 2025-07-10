@@ -3,8 +3,201 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\CourrierArrive;
+use App\Models\Reponse;
+use App\Models\Provenance;
+use App\Models\Objet;
+use App\Models\Etat;
+use App\Models\Departement;
 
 class CourrierArriveController extends Controller
 {
-    //
+    
+    public function formCourrierArrivee($espace)
+    {
+        if (!in_array($espace, ['cmss', 'cmcas'])) {
+            abort(404);
+        }
+
+        $objets = Objet::all();
+        $etats = Etat::all();
+        $departements = Departement::all();
+        $provenances = Provenance::all();
+        $reponses = Reponse::all();
+        $nextId = CourrierArrive::max('id') + 1;
+
+        return view('courrier.arrivee', compact(
+            'espace', 'objets', 'etats', 'departements', 'provenances', 'reponses', 'nextId'
+        ));
+    }
+
+
+    public function storePhase1(Request $request, $espace)
+    {
+        $request->validate([
+            'reference' => 'required|string|max:255|unique:courrier_arrives,reference',
+            'date_reception' => 'required|date',
+            'provenance_id' => 'required|exists:provenances,id',
+            'objet_id' => 'nullable|exists:objets,id',
+            'description_objet' => 'nullable|string',
+            'departement_id' => 'required|exists:departements,id',
+            'etat_id' => 'required|exists:etats,id',
+            'reponse_id' => 'nullable|exists:reponses,id',
+            'agent_nom' => 'nullable|string|max:255',
+            'agent_prenom' => 'nullable|string|max:255',
+            'agent_matricule' => 'nullable|string|max:255',
+            'etablissement_raison_sociale' => 'nullable|string|max:255',
+        ]);
+
+        $courrier = new CourrierArrive();
+        $courrier->reference = $request->reference;
+        $courrier->date_reception = $request->date_reception;
+        $courrier->provenance_id = $request->provenance_id;
+        $courrier->objet_id = $request->objet_id;
+        $courrier->description_objet = $request->description_objet;
+        $courrier->departement_id = $request->departement_id;
+        $courrier->etat_id = $request->etat_id;
+        $courrier->reponse_id = $request->reponse_id;
+        $courrier->agent_nom = $request->agent_nom;
+        $courrier->agent_prenom = $request->agent_prenom;
+        $courrier->agent_matricule = $request->agent_matricule;
+        $courrier->etablissement_raison_sociale = $request->etablissement_raison_sociale;
+        $courrier->matricule = Auth::user()->matricule;
+        $courrier->type_espace = $espace;
+
+        $courrier->save();
+
+        return redirect()->route('courrier.arrivee.form', ['espace' => $espace])
+            ->with('success', 'Courrier enregistré avec succès.');
+    }
+
+    
+    public function storePhase2(Request $request, $espace)
+    {
+        $request->validate([
+            'courrier_id' => 'required|exists:courrier_arrives,id',
+            'annotation' => 'nullable|string',
+            'date_envoi' => 'required|date',
+            'reponse_id' => 'required|exists:reponses,id',
+        ]);
+
+        $courrier = CourrierArrive::findOrFail($request->courrier_id);
+        $courrier->annotation = $request->annotation;
+        $courrier->date_envoi = $request->date_envoi;
+        $courrier->reponse_id = $request->reponse_id;
+        $courrier->save();
+
+        return back()->with('success', 'Phase 2 enregistrée avec succès ✅');
+    }
+
+  
+public function historiqueArrivee($espace, Request $request)
+{
+    if (!in_array($espace, ['cmss', 'cmcas'])) {
+        abort(404);
+    }
+
+    $query = CourrierArrive::with(['provenance', 'objet', 'etat'])
+        ->where('type_espace', $espace);
+
+    $search = trim($request->input('search'));
+
+    if ($search !== '') {
+        $query->where(function ($q) use ($search) {
+            $q->where('reference', 'like', "%$search%")
+              ->orWhere('description_objet', 'like', "%$search%")
+              ->orWhereHas('provenance', function ($sub) use ($search) {
+                  $sub->where('type', 'like', "%$search%");
+              });
+        });
+    }
+
+    $courriers = $query->orderBy('created_at', 'desc')->paginate(10); // ✅ paginate() toujours
+
+    return view('courrier.historique_arrivee', compact('espace', 'courriers', 'search'));
+}
+
+
+
+   
+    public function edit($id)
+    {
+        $courrier = CourrierArrive::findOrFail($id);
+
+        $objets = Objet::all();
+        $etats = Etat::all();
+        $departements = Departement::all();
+        $provenances = Provenance::all();
+        $reponses = Reponse::all();
+
+        return view('courrier.edit_arrivee', compact(
+            'courrier', 'objets', 'etats', 'departements', 'provenances', 'reponses'
+        ));
+    }
+
+   
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'reference' => "required|string|max:255|unique:courrier_arrives,reference,$id",
+            'date_reception' => 'required|date',
+            'provenance_id' => 'required|exists:provenances,id',
+            'objet_id' => 'nullable|exists:objets,id',
+            'description_objet' => 'nullable|string',
+            'departement_id' => 'required|exists:departements,id',
+            'etat_id' => 'required|exists:etats,id',
+            'reponse_id' => 'nullable|exists:reponses,id',
+            'agent_nom' => 'nullable|string|max:255',
+            'agent_prenom' => 'nullable|string|max:255',
+            'agent_matricule' => 'nullable|string|max:255',
+            'etablissement_raison_sociale' => 'nullable|string|max:255',
+            'annotation' => 'nullable|string',
+            'date_envoi' => 'nullable|date',
+        ]);
+
+        $courrier = CourrierArrive::findOrFail($id);
+
+        $courrier->reference = $request->reference;
+        $courrier->date_reception = $request->date_reception;
+        $courrier->provenance_id = $request->provenance_id;
+        $courrier->objet_id = $request->objet_id;
+        $courrier->description_objet = $request->description_objet;
+        $courrier->departement_id = $request->departement_id;
+        $courrier->etat_id = $request->etat_id;
+        $courrier->reponse_id = $request->reponse_id;
+        $courrier->agent_nom = $request->agent_nom;
+        $courrier->agent_prenom = $request->agent_prenom;
+        $courrier->agent_matricule = $request->agent_matricule;
+        $courrier->etablissement_raison_sociale = $request->etablissement_raison_sociale;
+        $courrier->annotation = $request->annotation;
+        $courrier->date_envoi = $request->date_envoi;
+
+        $courrier->save();
+
+        return redirect()->route('courrier.arrivee.historique', ['espace' => $courrier->type_espace])
+            ->with('success', 'Courrier modifié avec succès.');
+    }
+
+   
+    public function ajouterReferenceDepart($id)
+    {
+        $courrier = CourrierArrive::findOrFail($id);
+        return view('courrier.ajouter_reference_depart', compact('courrier'));
+    }
+
+   
+    public function enregistrerReferenceDepart(Request $request, $id)
+    {
+        $request->validate([
+            'reference_courrierDepart' => 'required|string|max:255',
+        ]);
+
+        $courrier = CourrierArrive::findOrFail($id);
+        $courrier->reference_courrierDepart = $request->reference_courrierDepart;
+        $courrier->save();
+
+        return redirect()->route('courrier.arrivee.historique', ['espace' => $courrier->type_espace])
+            ->with('success', 'Référence de courrier départ ajoutée avec succès.');
+    }
 }

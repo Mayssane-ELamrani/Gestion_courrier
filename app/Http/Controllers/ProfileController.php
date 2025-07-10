@@ -44,20 +44,6 @@ class ProfileController extends Controller
         $user->password = Hash::make($request->password);
         $user->save();
 
-        return back()->with('status', 'password-updated');
-    }
-
-    public function destroy(Request $request)
-    {
-        $request->validate([
-            'password' => ['required', 'current_password'],
-        ]);
-
-        $user = Auth::user();
-
-        Auth::logout();
-
-        $user->delete();
-        return redirect('/login')->with('success', 'Votre compte a été supprimé avec succès.');
+        return back()->with('status', 'Mot de passe modifié avec succès.');
     }
 }

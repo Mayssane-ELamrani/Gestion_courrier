@@ -20,17 +20,20 @@ return new class extends Migration
             $table->unsignedBigInteger('objet_id')->nullable();
             $table->text('description_objet')->nullable();
             $table->unsignedBigInteger('etat_id');
-            $table->unsignedBigInteger('departement_source_id');
+            $table->unsignedBigInteger('departement_source_id')->nullable();
+            $table->string('nom_agent')->nullable();
             $table->unsignedBigInteger('matricule');
-            $table->enum('type_espace', ['cmss', 'cmcas']);  
+            $table->enum('type_espace', ['cmss', 'cmcas']);
+            $table->enum('type_source', ['agent', 'departement'])->default('agent');
+            
+            $table->softDeletes(); 
             $table->timestamps();
-            $table->softDeletes();
 
             // Clés étrangères
             $table->foreign('objet_id')->references('id')->on('objets');
             $table->foreign('etat_id')->references('id')->on('etats');
             $table->foreign('departement_source_id')->references('id')->on('departements');
-            $table->foreign('matricule')->references('matricule')->on('personnes')->onDelete('cascade');  // <-- clé étrangère matricule
+            $table->foreign('matricule')->references('matricule')->on('personnes')->onDelete('cascade');
         });
     }
 

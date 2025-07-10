@@ -4,6 +4,7 @@
 @section('title', 'Historique des courriers de départ - ' . strtoupper($espace))
 
 @push('styles')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <style>
     .container {
         padding: 40px;
@@ -35,6 +36,22 @@
 
     .btn:hover {
         background: #2f827a;
+    }
+
+    .btn-action {
+        background-color: #3aa090;
+        color: white;
+        padding: 6px 12px;
+        font-size: 13px;
+        border-radius: 6px;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 5px;
+        transition: background 0.2s ease-in-out;
+    }
+
+    .btn-action:hover {
+        background-color: #2f827a;
     }
 
     table {
@@ -83,10 +100,24 @@
         color: white;
         font-weight: bold;
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 15px;
     }
 
     .search-bar button:hover {
         background: #389a89;
+    }
+
+    .message-info {
+        background: #ffe0e0;
+        color: #900;
+        padding: 12px 18px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-weight: bold;
+        text-align: center;
     }
 </style>
 @endpush
@@ -97,25 +128,31 @@
 
     <a href="{{ route('courrier.index', ['espace' => $espace, 'type' => 'depart']) }}" class="btn">← Retour au formulaire</a>
 
-    
-    <form method="GET" class="search-bar">
-        <input type="text" name="search" placeholder="Rechercher par ID, référence ou destinataire..." value="{{ request('search') }}">
-        <button type="submit">🔍 Rechercher</button>
+    <form method="GET" action="{{ route('courrier.depart.recherche', ['espace' => $espace]) }}" class="search-bar">
+        <input type="text" name="search" placeholder="Rechercher par numéro, référence, source ou destinataire..." value="{{ request('search') }}">
+        <button type="submit">
+            <i class="bi bi-search"></i> Rechercher
+        </button>
     </form>
+
+    @if(isset($message))
+        <div class="message-info">{{ $message }}</div>
+    @endif
 
     <table>
         <thead>
             <tr>
-                <th>numero d'ordre</th>
+                <th>Numéro d'ordre</th>
                 <th>Référence</th>
                 <th>Date d'envoi</th>
                 <th>Destinataire</th>
-                <th>Département</th>
+                <th>Source</th>
                 <th>Objet</th>
                 <th>Description</th>
                 <th>État</th>
-                <th>Type d'espace</th>
+                <th>Espace</th>
                 <th>Créé le</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -125,16 +162,34 @@
                     <td>{{ $courrier->reference }}</td>
                     <td>{{ $courrier->date_envoi }}</td>
                     <td>{{ $courrier->destinataire }}</td>
-                    <td>{{ $courrier->departement->nom ?? '-' }}</td>
+                    <td>{{ $courrier->nom_agent ?? $courrier->departement?->nom ?? '-' }}</td>
                     <td>{{ $courrier->objet->nom ?? '-' }}</td>
                     <td>{{ $courrier->description_objet ?? '-' }}</td>
                     <td>{{ $courrier->etat->nom ?? '-' }}</td>
                     <td>{{ $courrier->type_espace ?? '-' }}</td>
                     <td>{{ $courrier->created_at->format('d/m/Y H:i') }}</td>
+                    <td>
+                        @if (empty($courrier->reference_courrierArrive))
+                            <a href="{{ route('courrier.depart.lier.arrivee', $courrier->id) }}" class="btn-action">
+                                Réf. arrivée
+                            </a>
+                        @else
+                            <span style="font-size: 13px;">
+                                Réf. liée :
+                                <a href="{{ route('courrier.arrivee.historique', ['espace' => $espace]) }}?search={{ $courrier->reference_courrierArrive }}">
+                                    {{ $courrier->reference_courrierArrive }}
+                                </a>
+                            </span>
+                        @endif
+                        <br>
+                        <a href="{{ route('courrier.depart.edit', $courrier->id) }}" class="btn-action">
+                            Modifier
+                        </a>
+                    </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="10" style="text-align:center;">Aucun courrier trouvé.</td>
+                    <td colspan="11" style="text-align:center;">Aucun courrier trouvé.</td>
                 </tr>
             @endforelse
         </tbody>

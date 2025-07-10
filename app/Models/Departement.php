@@ -15,6 +15,8 @@ class Departement extends Model
     {
         return $this->hasMany(CourrierArrive::class, 'departement_id');
     }
+
+    
     public function courriersDepart()
     {
         return $this->hasMany(CourrierDepart::class, 'departement_source_id');

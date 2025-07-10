@@ -3,15 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Agent extends Model
 {
-     protected $fillable = [
+    use SoftDeletes;
+
+    protected $fillable = [
         'nom',
         'prenom',
         'matricule',
-     ];
-      public function provenance()
+        'provenance_id',
+    ];
+
+    public function provenance()
     {
         return $this->belongsTo(Provenance::class);
     }

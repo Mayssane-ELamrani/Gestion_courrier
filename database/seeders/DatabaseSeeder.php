@@ -10,7 +10,6 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        
         if (!DB::table('personnes')->where('email', 'aya@gmail.com')->exists()) {
             DB::table('personnes')->insert([
                 'nom_complet' => 'Aya',
@@ -37,7 +36,6 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        
         $etats = [
             ['nom' => 'normal', 'created_at' => now(), 'updated_at' => now()],
             ['nom' => 'urgent', 'created_at' => now(), 'updated_at' => now()],
@@ -48,7 +46,6 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        
         $objets = [
             ['nom' => 'reclamation', 'description' => 'Réclamation', 'created_at' => now(), 'updated_at' => now()],
             ['nom' => 'demande', 'description' => 'Demande', 'created_at' => now(), 'updated_at' => now()],
@@ -60,7 +57,6 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-       
         $departements = [
             ['nom' => 'Département Système dInformation CMSS', 'responsable' => null, 'created_at' => now(), 'updated_at' => now()],
             ['nom' => 'Département Contrôle et Reporting', 'responsable' => null, 'created_at' => now(), 'updated_at' => now()],
@@ -74,7 +70,6 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-       
         $reponses = [
             ['choix' => 'oui', 'created_at' => now(), 'updated_at' => now()],
             ['choix' => 'non', 'created_at' => now(), 'updated_at' => now()],
@@ -83,6 +78,17 @@ class DatabaseSeeder extends Seeder
         foreach ($reponses as $reponse) {
             if (!DB::table('reponses')->where('choix', $reponse['choix'])->exists()) {
                 DB::table('reponses')->insert($reponse);
+            }
+        }
+
+        $provenances = [
+            ['type' => 'agent', 'created_at' => now(), 'updated_at' => now()],
+            ['type' => 'etablissement', 'created_at' => now(), 'updated_at' => now()],
+        ];
+
+        foreach ($provenances as $provenance) {
+            if (!DB::table('provenances')->where('type', $provenance['type'])->exists()) {
+                DB::table('provenances')->insert($provenance);
             }
         }
     }

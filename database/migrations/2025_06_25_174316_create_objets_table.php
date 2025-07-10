@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nom')->unique();
             $table->text('description');
+            $table->softDeletes(); 
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('objets');
+        Schema::dropIfExists('objets'); 
     }
 };

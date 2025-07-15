@@ -1,4 +1,54 @@
-@extends('layouts.app')
+
+@extends('layouts.limtless')
+
+@section('title', 'Choix d\'espace - CMSS')
+
+@section('content')
+<div class="choice-box">
+  <div class="top-bar">
+    <a href="{{ url()->previous() }}">⬅ Retour</a>
+  </div>
+
+  <h1>Ajouter une référence de courrier arrivé</h1>
+
+  <p style="text-align:center; margin-bottom: 30px;">
+    Courrier de départ n° <strong>{{ $courrier->id }}</strong> — Référence : <strong>{{ $courrier->reference }}</strong>
+  </p>
+
+  <form method="POST" action="{{ route('courrier.depart.lier.arrivee.store', $courrier->id) }}">
+    @csrf
+    <div>
+      <label for="reference_courrierArrive">Référence du courrier arrivé :</label>
+      <input type="text" name="reference_courrierArrive" id="reference_courrierArrive" required>
+      @error('reference_courrierArrive')
+        <small style="color:#c00000;">{{ $message }}</small>
+      @enderror
+    </div>
+
+    <button type="submit" class="submit-button">
+      <i class="bi bi-save"></i> Enregistrer
+    </button>
+  </form>
+</div>
+@endsection 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{{-- @extends('layouts.app')
 @include('components.logo')
 
 @push('styles')
@@ -130,4 +180,4 @@
     </button>
   </form>
 </div>
-@endsection
+@endsection --}}

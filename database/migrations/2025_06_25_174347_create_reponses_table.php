@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('reponses', function (Blueprint $table) {
             $table->id();
-            $table->string('choix')->unique;
+            $table->string('choix')->unique();
             $table->SoftDeletes(); // <-- ajout de la colonne deleted_at pour soft delete
             $table->timestamps();
         });

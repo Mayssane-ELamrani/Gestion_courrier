@@ -50,17 +50,25 @@ Route::middleware('auth')->group(function () {
     Route::get('/courrier/{id}/depart/edit', [CourrierDepartController::class, 'edit'])->name('courrier.depart.edit');
     Route::put('/courrier/{id}/depart/update', [CourrierDepartController::class, 'update'])->name('courrier.depart.update');
 
-    
+    Route::get('/courrier/arrivee/{espace}/recherche-id', [CourrierArriveController::class, 'rechercheParId'])->name('courrier.arrivee.recherche_id');
     Route::get('/courrier/arrivee/{espace}/historique', [CourrierArriveController::class, 'historiqueArrivee'])->name('courrier.arrivee.historique');
 
     
-   Route::prefix('{espace}')->group(function () {
+Route::prefix('{espace}')->group(function () {
     Route::get('courrier/arrive/form', [CourrierArriveController::class, 'formCourrierArrivee'])->name('courrier.arrivee.form');
     Route::post('courrier/arrive/phase1', [CourrierArriveController::class, 'storePhase1'])->name('courrier.arrive.phase1.store');
     Route::post('courrier/arrive/phase2', [CourrierArriveController::class, 'storePhase2'])->name('courrier.arrive.phase2.store');
     Route::get('courrier/arrive/historique', [CourrierArriveController::class, 'historiqueArrivee'])->name('courrier.arrive.historique');
-    
+    Route::get('courrier/arrive/phase2/{id}', [CourrierArriveController::class, 'formPhase2'])->name('courrier.arrive.phase2.form');
+    Route::get('courrier/arrive/details/{id}', [CourrierArriveController::class, 'details'])->name('courrier.arrive.details');
+  
+ 
 });
+Route::get('courrier/arrive/edit/{id}', [CourrierArriveController::class, 'edit'])->name('courrier.arrive.edit');
+Route::put('courrier/arrive/update/{id}', [CourrierArriveController::class, 'update'])->name('courrier.arrive.update');
+
+
+
 Route::get('/courrier-arrive/{id}/ajouter-reference-depart', [CourrierArriveController::class, 'ajouterReferenceDepart'])
         ->name('courrier.arrive.lier.depart');
 
@@ -73,7 +81,8 @@ Route::get('/courrier-arrive/{id}/ajouter-reference-depart', [CourrierArriveCont
     
     Route::prefix('admin')->group(function () {
         Route::get('/', [AdminController::class, 'admin'])->name('gestion.admin');
-
+       
+     
 
         Route::put('/utilisateur/{id}', [AdminController::class, 'updateUtilisateur'])->name('admin.utilisateur.update');
         Route::delete('/utilisateur/{id}', [AdminController::class, 'deleteUtilisateur'])->name('admin.utilisateur.delete');
@@ -83,13 +92,14 @@ Route::get('/courrier-arrive/{id}/ajouter-reference-depart', [CourrierArriveCont
         Route::post('/departement/store', [AdminController::class, 'storeDepartement'])->name('admin.departement.store');
         Route::put('/departement/{id}', [AdminController::class, 'updateDepartement'])->name('admin.departement.update');
         Route::delete('/departement/{id}', [AdminController::class, 'deleteDepartement'])->name('admin.departement.delete');
-
+       
       
         Route::post('/objet/store', [AdminController::class, 'storeObjet'])->name('admin.objet.store');
         Route::put('/objet/{id}', [AdminController::class, 'updateObjet'])->name('admin.objet.update');
         Route::delete('/objet/{id}', [AdminController::class, 'deleteObjet'])->name('admin.objet.delete');
     });
-
+ Route::get('/admin', [AdminController::class, 'index'])->name('gestion.admin');
+ 
 });
 
 

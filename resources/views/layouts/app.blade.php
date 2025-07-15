@@ -1,3 +1,4 @@
+{{-- @extends(partials.navbar)
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -107,4 +108,4 @@
 
   @stack('scripts')
 </body>
-</html>
+</html> --}}

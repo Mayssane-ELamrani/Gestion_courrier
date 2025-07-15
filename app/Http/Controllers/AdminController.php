@@ -32,6 +32,36 @@ class AdminController extends Controller
 
         return view('admin.index', compact('departements', 'objets', 'utilisateurs'));
     }
+   
+
+public function index()
+{
+    $utilisateurs = User::all();
+    $departements = Departement::all();
+    $objets = Objet::all();
+
+    $totalArrive = CourrierArrive::count();
+    $totalDepart = CourrierDepart::count();
+
+    $totalCmssArrive = CourrierArrive::where('type_espace', 'cmss')->count();
+    $totalCmcasArrive = CourrierArrive::where('type_espace', 'cmcas')->count();
+    $totalCmssDepart = CourrierDepart::where('type_espace', 'cmss')->count();
+    $totalCmcasDepart = CourrierDepart::where('type_espace', 'cmcas')->count();
+
+    $parDepartement = Departement::withCount(['courriersArrives', 'courriersDepart'])->get();
+    $parObjet = Objet::withCount(['courriersArrives', 'courriersDepart'])->get();
+
+    return view('Admin.index', compact(
+        'utilisateurs', 'departements', 'objets',
+        'totalArrive', 'totalDepart',
+        'totalCmssArrive', 'totalCmcasArrive',
+        'totalCmssDepart', 'totalCmcasDepart',
+        'parDepartement', 'parObjet'
+    ));
+
+
+}
+
 
     
 

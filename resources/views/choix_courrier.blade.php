@@ -1,4 +1,55 @@
-@extends('layouts.app')
+@extends('layouts.limtless')
+
+@section('title', 'Choix d\'espace - CMSS')
+
+@section('content')
+
+
+@section('content')
+<div class="choice-box">
+  <h1>Choisissez le type de courrier pour {{ strtoupper($espace) }}</h1>
+
+  <div class="options">
+    <div class="option-tile identique">
+      <a href="{{ route('courrier.index', ['espace' => $espace, 'type' => 'depart']) }}">
+        📤 Courrier de départ
+      </a>
+    </div>
+    <div class="option-tile identique">
+      <a href="{{ route('courrier.index', ['espace' => $espace, 'type' => 'arrivee']) }}">
+        📥 Courrier d'arrivée
+      </a>
+    </div>
+  </div>
+</div>
+@endsection
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{{-- @extends('layouts.app')
 @include('components.logo')
 
 @section('title', 'Choix du courrier - ' . strtoupper($espace))
@@ -72,4 +123,4 @@
     </div>
   </div>
 </div>
-@endsection
+@endsection --}}

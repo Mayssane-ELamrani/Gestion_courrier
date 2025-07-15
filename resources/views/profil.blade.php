@@ -1,209 +1,95 @@
-@extends('layouts.app')
+@extends('layouts.limtless')
 
-@section('title', 'Profil - CMSS')
-
-@push('styles')
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;500;600&display=swap');
-
-  body {
-    font-family: 'Inter', sans-serif;
-    background-color: #f0f4f8;
-  }
-
-  .choice-box {
-    background: white;
-    padding: 60px 50px;
-    border-radius: 20px;
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
-    width: 100%;
-    max-width: 900px;
-    position: relative;
-    margin: 30px auto;
-  }
-
-  .choice-box .logo {
-    position: absolute;
-    top: 20px;
-    right: 30px;
-    width: 90px;
-    height: 90px;
-    object-fit: contain;
-  }
-
-  .title-profil {
-    font-family: 'Playfair Display', serif;
-    font-size: 40px;
-    color: #0a3d3f;
-    text-align: center;
-    margin-bottom: 25px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
-    position: relative;
-  }
-
-  .title-profil::after {
-    content: "";
-    width: 80px;
-    height: 3px;
-    background-color: #4AB9A7;
-    display: block;
-    margin: 10px auto 0;
-    border-radius: 2px;
-  }
-
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-weight: 600;
-    color: #00796b;
-    font-size: 24px;
-    margin-top: 30px;
-    margin-bottom: 12px;
-    border-bottom: 3px solid #4AB9A7;
-    padding-bottom: 8px;
-    letter-spacing: 0.5px;
-  }
-
-  .form-group {
-    margin-bottom: 16px;
-  }
-
-  label {
-    font-weight: 500;
-    color: #333;
-    display: block;
-    margin-bottom: 5px;
-  }
-
-  input {
-    border: 1px solid #ccc !important;
-    padding: 10px;
-    border-radius: 8px;
-    width: 100%;
-    background-color: #f9f9f9;
-  }
-
-  input[readonly] {
-    background-color: #eaeaea;
-  }
-
-  .btn-primary {
-    background-color: #4AB9A7;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-weight: bold;
-    transition: 0.3s;
-  }
-
-  .btn-primary:hover {
-    background-color: #3AA090;
-  }
-
-  .section {
-    margin-top: 40px;
-  }
-
-  .text-green-600 {
-    color: #16a34a;
-  }
-
-  @media(max-width: 768px) {
-    .choice-box {
-      padding: 30px 20px;
-      margin: 15px auto;
-    }
-
-    .choice-box .logo {
-      width: 70px;
-      height: 70px;
-    }
-
-    .title-profil {
-      font-size: 28px;
-    }
-
-    .section-title {
-      font-size: 20px;
-      border-bottom-width: 2px;
-    }
-  }
-</style>
-@endpush
+@section('title', 'Mon profil')
 
 @section('content')
-<div class="choice-box">
-  <img src="{{ asset('images/LOGO_CMSS_ONEE_NEW-13.png') }}" class="logo" alt="Logo CMSS" />
-  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <h1 class="title-profil">
-    <i class="fas fa-user" style="margin-right: 10px;"></i> Mon profil
-  </h1>
-
-  <div class="section">
-    <div class="section-title">Informations personnelles</div>
-    <form method="POST" action="{{ route('profile.update') }}">
-      @csrf
-      @method('patch')
-
-      <div class="form-group">
-        <label for="nom_complet">Nom complet</label>
-        <x-text-input id="nom_complet" name="nom_complet" type="text"
-          :value="old('nom_complet', auth()->user()->nom_complet)" required autofocus />
-      </div>
-
-      <div class="form-group">
-        <label for="email">Email</label>
-        <x-text-input id="email" name="email" type="email"
-          :value="old('email', auth()->user()->email)" required />
-      </div>
-
-      <div class="form-group">
-        <label for="matricule">Matricule</label>
-        <x-text-input id="matricule" name="matricule" type="text"
-          :value="auth()->user()->matricule" readonly />
-      </div>
-
-      <button type="submit" class="btn-primary mt-3">Sauvegarder</button>
-
-      @if (session('status') === 'profile-updated')
-        <p class="text-sm text-green-600 mt-2">Modifications enregistrées.</p>
-      @endif
-    </form>
+<div class="card">
+  <div class="card-header text-center">
+    <h1 class="title-profil d-inline-block">
+      <i class="fas fa-user me-2"></i> Mon profil
+    </h1>
   </div>
 
-  <div class="section">
-    <div class="section-title">Modifier le mot de passe</div>
-    <form method="POST" action="{{ route('password.update') }}">
-      @csrf
-      @method('put')
+  <div class="card-body">
 
-      <div class="form-group">
-        <label for="current_password">Mot de passe actuel</label>
-        <x-text-input id="current_password" name="current_password" type="password" />
-      </div>
+    {{-- Conteneur horizontal des deux formulaires --}}
+    <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between;">
 
-      <div class="form-group">
-        <label for="password">Nouveau mot de passe</label>
-        <x-text-input id="password" name="password" type="password" />
-      </div>
+      {{-- Formulaire Informations personnelles --}}
+      <form method="POST" action="{{ route('profile.update') }}" 
+            style="flex: 1 1 48%; background: #f8f9fa; padding: 20px; border-radius: 12px; border: 1px solid #ddd;">
+        @csrf
+        @method('patch')
+        <h3 style="font-size: 18px; border-bottom: 2px solid #4AB9A7; padding-bottom: 8px; margin-bottom: 15px;">
+          Informations personnelles
+        </h3>
 
-      <div class="form-group">
-        <label for="password_confirmation">Confirmer le mot de passe</label>
-        <x-text-input id="password_confirmation" name="password_confirmation" type="password" />
-      </div>
+        <div class="mb-3">
+          <label class="form-label" for="nom_complet" style="font-size: 14px;">Nom complet</label>
+          <x-text-input id="nom_complet" class="form-control" style="font-size: 14px; padding: 6px;" name="nom_complet" type="text"
+            :value="old('nom_complet', auth()->user()->nom_complet)" required autofocus />
+        </div>
 
-      <button type="submit" class="btn-primary mt-3">Mettre à jour</button>
+        <div class="mb-3">
+          <label class="form-label" for="email" style="font-size: 14px;">Email</label>
+          <x-text-input id="email" class="form-control" style="font-size: 14px; padding: 6px;" name="email" type="email"
+            :value="old('email', auth()->user()->email)" required />
+        </div>
 
-      @if (session('status') === 'password-updated')
-        <p class="text-sm text-green-600 mt-2">Mot de passe modifié avec succès.</p>
-      @endif
-    </form>
+        <div class="mb-3">
+          <label class="form-label" for="matricule" style="font-size: 14px;">Matricule</label>
+          <x-text-input id="matricule" name="matricule" type="text" readonly
+            :value="auth()->user()->matricule" class="form-control" style="font-size: 14px; padding: 6px;" />
+        </div>
+
+        <div class="d-flex justify-content-end">
+          <button type="submit" class="btn btn-success">Sauvegarder</button>
+        </div>
+
+        @if (session('status') === 'profile-updated')
+        <div class="alert alert-success text-center mt-2">
+          <i class="fas fa-check-circle me-2"></i> Modifications enregistrées.
+        </div>
+        @endif
+      </form>
+
+      {{-- Formulaire Changement de mot de passe --}}
+      <form method="POST" action="{{ route('password.update') }}" 
+            style="flex: 1 1 48%; background: #f8f9fa; padding: 20px; border-radius: 12px; border: 1px solid #ddd;">
+        @csrf
+        @method('put')
+        <h3 style="font-size: 18px; border-bottom: 2px solid #4AB9A7; padding-bottom: 8px; margin-bottom: 15px;">
+          Modifier le mot de passe
+        </h3>
+
+        <div class="mb-3">
+          <label class="form-label" for="current_password" style="font-size: 14px;">Mot de passe actuel</label>
+          <x-text-input class="form-control" style="font-size: 14px; padding: 6px;" id="current_password" name="current_password" type="password" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="password" style="font-size: 14px;">Nouveau mot de passe</label>
+          <x-text-input class="form-control" style="font-size: 14px; padding: 6px;" id="password" name="password" type="password" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="password_confirmation" style="font-size: 14px;">Confirmer le mot de passe</label>
+          <x-text-input class="form-control" style="font-size: 14px; padding: 6px;" id="password_confirmation" name="password_confirmation" type="password" />
+        </div>
+
+        <div class="d-flex justify-content-end">
+          <button type="submit" class="btn btn-success">Mettre à jour</button>
+        </div>
+
+        @if (session('status') === 'password-updated')
+        <p class="text-sm text-success mt-2 text-center">Mot de passe modifié avec succès.</p>
+        @endif
+      </form>
+
+    </div> {{-- fin ligne des formulaires --}}
+
   </div>
 </div>
 @endsection

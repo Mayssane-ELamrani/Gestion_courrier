@@ -1,4 +1,126 @@
-@extends('layouts.app')
+@extends('layouts.limtless')
+
+@section('title', 'Choix d\'espace - CMSS')
+
+@section('content')
+<div class="container">
+    <h1>Historique des courriers de départ ({{ strtoupper($espace) }})</h1>
+
+    <a href="{{ route('courrier.index', ['espace' => $espace, 'type' => 'depart']) }}" class="btn">← Retour au formulaire</a>
+
+    <form method="GET" action="{{ route('courrier.depart.recherche', ['espace' => $espace]) }}" class="search-bar">
+        <input type="text" name="search" placeholder="Rechercher par numéro, référence, source ou destinataire..." value="{{ request('search') }}">
+        <button type="submit">
+            <i class="bi bi-search"></i> Rechercher
+        </button>
+    </form>
+
+    @if(isset($message))
+        <div class="message-info">{{ $message }}</div>
+    @endif
+
+    <table>
+        <thead>
+            <tr>
+                <th>Numéro d'ordre</th>
+                <th>Référence</th>
+                <th>Date d'envoi</th>
+                <th>Destinataire</th>
+                <th>Source</th>
+                <th>Objet</th>
+                <th>Description</th>
+                <th>État</th>
+                <th>Espace</th>
+                <th>Créé le</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($courriers as $courrier)
+                <tr>
+                    <td>{{ $courrier->id }}</td>
+                    <td>{{ $courrier->reference }}</td>
+                    <td>{{ $courrier->date_envoi }}</td>
+                    <td>{{ $courrier->destinataire }}</td>
+                    <td>{{ $courrier->nom_agent ?? $courrier->departement?->nom ?? '-' }}</td>
+                    <td>{{ $courrier->objet->nom ?? '-' }}</td>
+                    <td>{{ $courrier->description_objet ?? '-' }}</td>
+                    <td>{{ $courrier->etat->nom ?? '-' }}</td>
+                    <td>{{ $courrier->type_espace ?? '-' }}</td>
+                    <td>{{ $courrier->created_at->format('d/m/Y H:i') }}</td>
+                    <td>
+                        @if (empty($courrier->reference_courrierArrive))
+                            <a href="{{ route('courrier.depart.lier.arrivee', $courrier->id) }}" class="btn-action">
+                                Réf. arrivée
+                            </a>
+                        @else
+                            <span style="font-size: 13px;">
+                                Réf. liée :
+                                <a href="{{ route('courrier.arrivee.historique', ['espace' => $espace]) }}?search={{ $courrier->reference_courrierArrive }}">
+                                    {{ $courrier->reference_courrierArrive }}
+                                </a>
+                            </span>
+                        @endif
+                        <br>
+                        <a href="{{ route('courrier.depart.edit', $courrier->id) }}" class="btn-action">
+                            Modifier
+                        </a>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="11" style="text-align:center;">Aucun courrier trouvé.</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
+@endsection
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{{-- @extends('layouts.app')
 @include('components.logo')
 
 @section('title', 'Historique des courriers de départ - ' . strtoupper($espace))
@@ -195,4 +317,4 @@
         </tbody>
     </table>
 </div>
-@endsection
+@endsection --}}

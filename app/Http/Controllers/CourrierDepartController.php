@@ -51,19 +51,26 @@ class CourrierDepartController extends Controller
         ])->with('success', 'Courrier enregistré avec succès.');
     }
 
-    public function historiqueDepart($espace)
-    {
-        if (!in_array($espace, ['cmss', 'cmcas'])) {
-            abort(404);
-        }
+public function historiqueDepart(Request $request, $espace)
+{
+    $search = $request->query('search');
 
-        $courriers = CourrierDepart::with(['departement', 'objet', 'etat'])
+    if ($search) {
+        // Cherche uniquement le courrier dont la référence correspond exactement à la recherche
+        $courriers = CourrierDepart::where('reference', $search)
             ->where('type_espace', $espace)
+            ->paginate(10);
+    } else {
+        // Sinon affiche tout
+        $courriers = CourrierDepart::where('type_espace', $espace)
             ->orderBy('created_at', 'desc')
-            ->get();
-
-        return view('courrier.historique_depart', compact('espace', 'courriers'));
+            ->paginate(10);
     }
+
+    return view('courrier.historique_depart', compact('courriers', 'espace', 'search'));
+}
+
+
 
     public function rechercherCourrierDepart($espace, Request $request)
     {

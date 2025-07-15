@@ -87,6 +87,47 @@ class CourrierArriveController extends Controller
         return redirect()->route('courrier.arrivee.form', ['espace' => $espace])
             ->with('success', 'Courrier enregistré avec succès.');
     }
+public function rechercheHistoriqueArrivee(Request $request, $espace)
+{
+    $search = $request->input('search');
+
+    $query = CourrierArrive::with(['objet', 'etat', 'provenance'])
+        ->where('type_espace', $espace);
+
+    // Si le search est un nombre, on suppose que c'est un ID direct
+    if (is_numeric($search)) {
+        $courrier = $query->where('id', $search)->first();
+
+        if ($courrier) {
+            return view('courrier.historique_arrivee', [
+                'courriers' => collect([$courrier]), // Convertir en collection pour foreach
+                'espace' => $espace,
+                'search' => $search,
+                'message' => null
+            ]);
+        } else {
+            return view('courrier.historique_arrivee', [
+                'courriers' => collect([]),
+                'espace' => $espace,
+                'search' => $search,
+                'message' => "Aucun courrier trouvé avec l'ID : $search"
+            ]);
+        }
+    }
+
+    // Sinon, recherche normale par référence
+    $courriers = $query->where('reference', 'like', "%$search%")
+        ->orderByDesc('created_at')
+        ->paginate(10);
+
+    return view('courrier.historique_arrivee', [
+        'courriers' => $courriers,
+        'espace' => $espace,
+        'search' => $search,
+        'message' => $courriers->isEmpty() ? "Aucun courrier trouvé avec la référence : $search" : null
+    ]);
+}
+
 
     public function storePhase2(Request $request, $espace)
     {

@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profil', [ProfileController::class, 'index'])->name('profile.index');
     Route::patch('/profil', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profil/password', [ProfileController::class, 'updatePassword'])->name('password.update');
+    Route::get('/{espace}/courriers/arrivee/recherche', [CourrierArriveController::class, 'rechercheHistoriqueArrivee'])->name('courrier.arrivee.recherche');
 
   
     Route::get('/choix-courrier/{espace}', [CourrierController::class, 'choix'])->name('choix.courrier');

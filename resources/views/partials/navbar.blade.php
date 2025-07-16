@@ -1,38 +1,4 @@
-@extends('partials.chemin_nav')
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>Limitless - Responsive Web Application Kit by Eugene Kopyov</title>
 
-	<!-- Global stylesheets -->
-<link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
-<link href="{{ asset('global_assets/css/icons/icomoon/styles.min.css') }}" rel="stylesheet" type="text/css">
-<link href="{{ asset('assets/css/all.min.css') }}" rel="stylesheet" type="text/css">
-<!-- /global stylesheets -->
-
-<!-- Core JS files -->
-<script src="{{ asset('global_assets/js/main/jquery.min.js') }}"></script>
-<script src="{{ asset('global_assets/js/main/bootstrap.bundle.min.js') }}"></script>
-<!-- /core JS files -->
-
-<!-- Theme JS files -->
-<script src="{{ asset('global_assets/js/plugins/visualization/echarts/echarts.min.js') }}"></script>
-<script src="{{ asset('global_assets/js/plugins/maps/echarts/world.js') }}"></script>
-
-<script src="{{ asset('assets/js/app.js') }}"></script>
-<script src="{{ asset('global_assets/js/demo_charts/pages/dashboard_6/light/area_gradient.js') }}"></script>
-<script src="{{ asset('global_assets/js/demo_charts/pages/dashboard_6/light/map_europe_effect.js') }}"></script>
-<script src="{{ asset('global_assets/js/demo_charts/pages/dashboard_6/light/progress_sortable.js') }}"></script>
-<script src="{{ asset('global_assets/js/demo_charts/pages/dashboard_6/light/bars_grouped.js') }}"></script>
-<script src="{{ asset('global_assets/js/demo_charts/pages/dashboard_6/light/line_label_marks.js') }}"></script>
-<!-- /theme JS files -->
-
-
-</head>
-<body>
    <div class="navbar navbar-expand-xl navbar-light navbar-static px-0">
 		<div class="d-flex flex-1 pl-3">
 			<div class="navbar-brand wmin-0 mr-1" style="
@@ -82,9 +48,6 @@
 			</div>
 	</div>
 					
-    
-</body>
-</html>
 
 
 

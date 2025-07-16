@@ -11,15 +11,15 @@ use App\Http\Controllers\CourrierArriveController;
 use App\Http\Controllers\AdminController;
 
 
-Route::get('/', function () {
+Route::get('/login', function () {
     return view('acceuil');
-});
+})->middleware('guest');
 
 
 Route::post('/acceuil', [AuthController::class, 'login'])->name('acceuil.login');
 
 
-Route::get('/choix_espace', function () {
+Route::get('/', function () {
     return view('profile.choix_espace'); 
 })->middleware('auth')->name('choix.espace');
 

@@ -28,15 +28,32 @@
     <script src="{{ asset('global_assets/js/demo_charts/pages/dashboard_6/light/bars_grouped.js') }}"></script>
     <script src="{{ asset('global_assets/js/demo_charts/pages/dashboard_6/light/line_label_marks.js') }}"></script>
     <!-- /theme JS files -->
+	   <!-- Global stylesheets -->
+    <link href="{{ asset('assets/fonts/inter/inter.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('global_assets/css/icons/fontawesome/styles.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('assets/css/ltr/all.min.css') }}" id="stylesheet" rel="stylesheet" type="text/css">
+    <!-- /global stylesheets -->
+
+    <!-- Core JS files -->
+    <script src="{{ asset('assets/demo/demo_configurator.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
+    <!-- /core JS files -->
+
+    <!-- Theme JS files -->
+    <script src="{{ asset('assets/js/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/js/vendor/forms/selects/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/js/vendor/forms/selects/bootstrap_multiselect.js') }}"></script>
+    <script src="{{ asset('assets/js/vendor/sliders/nouislider.min.js') }}"></script>
+    <script src="{{ asset('assets/js/vendor/ui/dragula.min.js') }}"></script>
+    <script src="{{ asset('assets/js/app.js') }}"></script>
+    <script src="{{ asset('assets/demo/pages/content_cards_header.js') }}"></script>
 </head>
 
 <body>
 
-    {{-- Barre de navigation --}}
-    @include("partials.navbar")
 
     <!-- Main navbar -->
-    <div class="navbar navbar-expand-lg navbar-light navbar-static"></div>
+       @include("partials.navbar")
     <!-- /main navbar -->
 
     <!-- Page content -->
@@ -46,17 +63,20 @@
         {{-- <div class="sidebar sidebar-dark sidebar-main sidebar-expand-lg"> ... </div> --}}
         <!-- /main sidebar -->
 
-        <!-- Secondary sidebar -->
-        {{-- <div class="sidebar sidebar-light sidebar-secondary sidebar-expand-lg"> ... </div> --}}
-        <!-- /secondary sidebar -->
-
         <!-- Main content -->
+	 <!-- Main content -->
         <div class="content-wrapper">
             <!-- Inner content -->
             <div class="content-inner">
 
-                {{-- Contenu injecté par les vues --}}
-                @yield('content')
+                {{-- Breadcrumb --}}
+				@yield('breadcrumb')
+               
+				<div class="content">
+					{{-- Contenu de la page --}}
+								@yield('content')
+				</div>
+         
 
                 <!-- Page header -->
                 {{-- <div class="page-header page-header-light shadow"> ... </div> --}}

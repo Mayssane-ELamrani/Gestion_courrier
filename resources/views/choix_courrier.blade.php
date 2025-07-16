@@ -1,126 +1,65 @@
 @extends('layouts.limtless')
 
-@section('title', 'Choix d\'espace - CMSS')
+@section('title', 'Choix du type de courrier')
+@section('breadcrumb')
+    <div class="page-header-content d-lg-flex border-top">
+						<div class="d-flex">
+							<div class="breadcrumb py-2">
+								<a href="{{ route('choix.espace') }}" class="breadcrumb-item" style="color: black"><i class="fa fa-home">     </i></a>
+								 <a href="" class="breadcrumb-item active">choix d'espace</a>
+                <a href="" class="breadcrumb-item active">choix de courrier</a>
+							</div>
 
+							<a href="#breadcrumb_elements" class="btn btn-light align-self-center collapsed d-lg-none border-transparent rounded-pill p-0 ms-auto" data-bs-toggle="collapse">
+								<i class="ph-caret-down collapsible-indicator ph-sm m-1"></i>
+							</a>
+						</div>
+
+						<div class="collapse d-lg-block ms-lg-auto" id="breadcrumb_elements">
+							<div class="d-lg-flex mb-2 mb-lg-0">
+								
+
+								
+							</div>
+						</div>
+					</div>
+@endsection
 @section('content')
+<div class="container d-flex flex-column align-items-center justify-content-center" style="min-height: 85vh;">
+  <h1 class="mb-5 text-center">Choisissez le type de courrier pour <strong>{{ strtoupper($espace) }}</strong></h1>
 
+  <div class="row justify-content-center gap-4 w-100 px-3">
 
-@section('content')
-<div class="choice-box">
-  <h1>Choisissez le type de courrier pour {{ strtoupper($espace) }}</h1>
-
-  <div class="options">
-    <div class="option-tile identique">
-      <a href="{{ route('courrier.index', ['espace' => $espace, 'type' => 'depart']) }}">
-        📤 Courrier de départ
-      </a>
+    <!-- Carte Courrier de départ -->
+    <div class="col-md-6 col-lg-4 mb-4">
+      <div class="card bg-success text-white text-center shadow-lg">
+        <div class="card-body py-5">
+          <h4 class="card-title mb-3">📤 Courrier de départ</h4>
+          <a href="{{ route('courrier.index', ['espace' => $espace, 'type' => 'depart']) }}" class="btn btn-light">
+            Accéder
+          </a>
+        </div>
+      </div>
     </div>
-    <div class="option-tile identique">
-      <a href="{{ route('courrier.index', ['espace' => $espace, 'type' => 'arrivee']) }}">
-        📥 Courrier d'arrivée
-      </a>
+
+    <!-- Carte Courrier d'arrivée -->
+    <div class="col-md-6 col-lg-4 mb-4">
+      <div class="card bg-success text-white text-center shadow-lg">
+        <div class="card-body py-5">
+          <h4 class="card-title mb-3">📥 Courrier d'arrivée</h4>
+          <a href="{{ route('courrier.index', ['espace' => $espace, 'type' => 'arrivee']) }}" class="btn btn-light">
+            Accéder
+          </a>
+        </div>
+      </div>
     </div>
+
+  </div>
+
+  <div class="mt-4">
+    <a href="{{ route('choix.espace') }}" class="btn btn-outline-secondary">
+      🔙 Retour à l'espace
+    </a>
   </div>
 </div>
 @endsection
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{{-- @extends('layouts.app')
-@include('components.logo')
-
-@section('title', 'Choix du courrier - ' . strtoupper($espace))
-
-@push('styles')
-<style>
-  .choice-box {
-    position: relative;
-    background: rgba(255, 255, 255, 0.95);
-    padding: 60px 50px;
-    border-radius: 16px;
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
-    width: 90%;
-    max-width: 900px;
-  }
-
-  .choice-box h1 {
-    color: #0a3d3f;
-    font-size: 36px;
-    margin-top: 10px;
-    text-align: center;
-  }
-
-  .options {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    margin-top: 40px;
-  }
-
-  .option-tile.identique {
-    background: #4AB9A7;
-    color: white;
-    padding: 25px;
-    border-radius: 12px;
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-    transition: 0.3s ease;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-  }
-
-  .option-tile.identique:hover {
-    background-color: #3AA090;
-    transform: translateY(-4px);
-  }
-
-  .option-tile.identique a {
-    color: white;
-    text-decoration: none;
-    display: block;
-  }
-</style>
-@endpush
-
-@section('content')
-<div class="choice-box">
-  <h1>Choisissez le type de courrier pour {{ strtoupper($espace) }}</h1>
-
-  <div class="options">
-    <div class="option-tile identique">
-      <a href="{{ route('courrier.index', ['espace' => $espace, 'type' => 'depart']) }}">
-        📤 Courrier de départ
-      </a>
-    </div>
-    <div class="option-tile identique">
-      <a href="{{ route('courrier.index', ['espace' => $espace, 'type' => 'arrivee']) }}">
-        📥 Courrier d'arrivée
-      </a>
-    </div>
-  </div>
-</div>
-@endsection --}}

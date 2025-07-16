@@ -149,31 +149,43 @@ public function rechercheHistoriqueArrivee(Request $request, $espace)
 
     }
 
-    public function historiqueArrivee($espace, Request $request)
-    {
-        if (!in_array($espace, ['cmss', 'cmcas'])) {
-            abort(404);
-        }
+  public function historiqueArrivee($espace, Request $request)
+{
+    if (!in_array($espace, ['cmss', 'cmcas'])) {
+        abort(404);
+    }
 
-        $query = CourrierArrive::with(['provenance', 'objet', 'etat'])
-            ->where('type_espace', $espace);
+    $search = trim($request->input('search'));
 
-        $search = trim($request->input('search'));
+    $query = CourrierArrive::with(['provenance', 'objet', 'etat'])
+        ->where('type_espace', $espace);
 
-        if ($search !== '') {
+    if ($search !== '') {
+        if (is_numeric($search)) {
+            // Recherche par ID (num d'ordre)
+            $query->where('id', $search);
+        } else {
+            // Recherche avancée
             $query->where(function ($q) use ($search) {
                 $q->where('reference', 'like', "%$search%")
                   ->orWhere('description_objet', 'like', "%$search%")
                   ->orWhereHas('provenance', function ($sub) use ($search) {
                       $sub->where('type', 'like', "%$search%");
+                  })
+                  ->orWhereHas('objet', function ($sub) use ($search) {
+                      $sub->where('nom', 'like', "%$search%");
+                  })
+                  ->orWhereHas('etat', function ($sub) use ($search) {
+                      $sub->where('nom', 'like', "%$search%");
                   });
             });
         }
-
-        $courriers = $query->orderBy('created_at', 'desc')->paginate(10);
-
-        return view('courrier.historique_arrivee', compact('espace', 'courriers', 'search'));
     }
+
+    $courriers = $query->orderBy('created_at', 'desc')->paginate(10);
+
+    return view('courrier.historique_arrivee', compact('espace', 'courriers', 'search'));
+}
 
  public function edit($id)
 {

@@ -9,6 +9,8 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
+       
+
         $request->validate([
             'matricule' => ['required', 'digits:5'],
             'password' => ['required'],

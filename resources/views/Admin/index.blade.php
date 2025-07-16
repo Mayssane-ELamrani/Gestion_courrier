@@ -1,4 +1,6 @@
-@extends('layouts.limtless')
+{{-- @extends('layouts.limtless')
+
+
 
 @section('title', 'Choix d\'espace - CMSS')
 
@@ -19,72 +21,8 @@
         </div>
     @endif
 
-    <!-- Statistiques générales -->
-    <section>
-        <h2>📊 Statistiques générales</h2>
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon">📥</div>
-                <div class="stat-number">{{ $totalArrive }}</div>
-                <div class="stat-label">Courriers arrivés</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">📤</div>
-                <div class="stat-number">{{ $totalDepart }}</div>
-                <div class="stat-label">Courriers départs</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">🏢</div>
-                <div class="stat-number">{{ $totalCmssArrive }}</div>
-                <div class="stat-label">CMSS (arrivés)</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">🏢</div>
-                <div class="stat-number">{{ $totalCmssDepart }}</div>
-                <div class="stat-label">CMSS (départs)</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">🏢</div>
-                <div class="stat-number">{{ $totalCmcasArrive }}</div>
-                <div class="stat-label">CMCAS (arrivés)</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">🏢</div>
-                <div class="stat-number">{{ $totalCmcasDepart }}</div>
-                <div class="stat-label">CMCAS (départs)</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Statistiques par Département -->
-    <section>
-        <h2>🏢 Statistiques par Département</h2>
-        <div class="stats-grid">
-            @foreach($parDepartement as $d)
-                <div class="stat-card">
-                    <div class="stat-label strong">{{ $d->nom }}</div>
-                    <div class="stat-small">Arrivés : {{ $d->courriers_arrives_count }}</div>
-                    <div class="stat-small">Départs : {{ $d->courriers_departs_count }}</div>
-                </div>
-            @endforeach
-        </div>
-    </section>
-
-    <!-- Statistiques par Objet -->
-    <section>
-        <h2>📄 Statistiques par Objet</h2>
-        <div class="stats-grid">
-            @foreach($parObjet as $o)
-                <div class="stat-card">
-                    <div class="stat-label strong">{{ $o->nom }}</div>
-                    <div class="stat-small">Arrivés : {{ $o->courriers_arrives_count }}</div>
-                    <div class="stat-small">Départs : {{ $o->courriers_departs_count }}</div>
-                </div>
-            @endforeach
-        </div>
-    </section>
-
-    <!-- Formulaire ajout utilisateur -->
+ 
+ <!-- Formulaire ajout utilisateur -->
     <section>
         <h2>➕ Ajouter un utilisateur</h2>
         <form method="POST" action="{{ route('admin.utilisateur.store') }}">
@@ -101,7 +39,6 @@
             <button type="submit">Créer l'utilisateur</button>
         </form>
     </section>
-
     <!-- Liste utilisateurs -->
     <section>
         <h2>👤 Utilisateurs</h2>
@@ -696,4 +633,4 @@
         </ul>
     </section>
 </div>
-@endsection --}}
+@endsection --}} 

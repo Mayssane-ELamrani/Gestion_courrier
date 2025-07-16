@@ -14,10 +14,9 @@
 
   <div class="card-body">
 
-    {{-- Conteneur horizontal des deux formulaires --}}
+ 
     <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between;">
 
-      {{-- Formulaire Informations personnelles --}}
       <form method="POST" action="{{ route('profile.update') }}" 
             style="flex: 1 1 48%; background: #f8f9fa; padding: 20px; border-radius: 12px; border: 1px solid #ddd;">
         @csrf
@@ -55,7 +54,6 @@
         @endif
       </form>
 
-      {{-- Formulaire Changement de mot de passe --}}
       <form method="POST" action="{{ route('password.update') }}" 
             style="flex: 1 1 48%; background: #f8f9fa; padding: 20px; border-radius: 12px; border: 1px solid #ddd;">
         @csrf
@@ -88,7 +86,7 @@
         @endif
       </form>
 
-    </div> {{-- fin ligne des formulaires --}}
+    </div>
 
   </div>
 </div>

@@ -164,6 +164,10 @@
 
 </body>
 </html> --}}
+
+
+{{-- 
+@dd(Auth::check()) --}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -189,7 +193,7 @@
 
 </head>
 
-<body>
+<body background={{asset('images/background.jpg')}}  width="130" alt="">
 
 
 

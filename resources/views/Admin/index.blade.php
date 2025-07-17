@@ -131,7 +131,7 @@
         </ul>
     </section>
 </div>
-@endsection
+@endsection --}}
 
 
 
@@ -190,10 +190,11 @@
 
 
 
-{{-- @extends('layouts.app')
-@include('components.logo')
+@extends('layouts.limtless')
 
-@section('title', 'Gestion administrative')
+
+
+@section('title', 'Choix d\'espace - CMSS')
 
 @push('styles')
 <style>
@@ -497,13 +498,14 @@
 
     <!-- Statistiques par Département -->
     <section>
+      
         <h2>🏢 Statistiques par Département</h2>
         <div class="stats-grid">
             @foreach($parDepartement as $d)
                 <div class="stat-card">
                     <div class="stat-label strong">{{ $d->nom }}</div>
                     <div class="stat-small">Arrivés : {{ $d->courriers_arrives_count }}</div>
-                    <div class="stat-small">Départs : {{ $d->courriers_departs_count }}</div>
+                    <div class="stat-small">Départs : {{ $d->courriers_depart_count }}</div>
                 </div>
             @endforeach
         </div>
@@ -511,13 +513,14 @@
 
     <!-- Statistiques par Objet -->
     <section>
+       
         <h2>📄 Statistiques par Objet</h2>
         <div class="stats-grid">
             @foreach($parObjet as $o)
                 <div class="stat-card">
                     <div class="stat-label strong">{{ $o->nom }}</div>
                     <div class="stat-small">Arrivés : {{ $o->courriers_arrives_count }}</div>
-                    <div class="stat-small">Départs : {{ $o->courriers_departs_count }}</div>
+                    <div class="stat-small">Départs : {{ $o->courriers_depart_count }}</div>
                 </div>
             @endforeach
         </div>
@@ -633,4 +636,4 @@
         </ul>
     </section>
 </div>
-@endsection --}} 
+@endsection 

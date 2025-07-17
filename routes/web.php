@@ -38,8 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/profil/password', [ProfileController::class, 'updatePassword'])->name('password.update');
     Route::get('/{espace}/courriers/arrivee/recherche', [CourrierArriveController::class, 'rechercheHistoriqueArrivee'])->name('courrier.arrivee.recherche');
 
-  
-    Route::get('/choix-courrier/{espace}', [CourrierController::class, 'choix'])->name('choix.courrier');
+
+    Route::get('/choix-courrier/cmss/{espace}', [CourrierController::class, 'choix'])->name('choix.courrier');
 
   
     Route::get('/courrier/{espace}/depart/historique', [CourrierDepartController::class, 'historiqueDepart'])->name('courrier.depart.historique');

@@ -44,7 +44,7 @@ class CourrierDepartController extends Controller
             'matricule' => Auth::user()->matricule,
             'type_espace' => $request->route('espace'),
         ]);
-              
+
         return redirect()->route('courrier.index', [
             'espace' => $request->route('espace'),
             'type' => 'depart'

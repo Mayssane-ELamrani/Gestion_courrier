@@ -5,7 +5,37 @@
 @extends('layouts.limtless')
 
 @section('title', 'Choix d\'espace - CMSS')
+@section('breadcrumb')
+    <div class="page-header-content d-lg-flex border-top">
+						<div class="d-flex">
+							<div class="breadcrumb py-2">
+								<a href="{{ route('choix.espace') }}" class="breadcrumb-item" style="color: black"><i class="fa fa-home">     </i></a>
+								 <a href="{{ route('choix.espace', ['espace' => $espace]) }}" class="breadcrumb-item active">choix d'espace</a>
+                <a href="{{ route('choix.courrier', ['espace' => $espace]) }}" class="breadcrumb-item active">choix de courrier</a>
+                  <a href="{{ route('courrier.arrivee.form', ['espace' => $espace, 'type' => 'arrive']) }}" class="breadcrumb-item active">courrier arrivee</a>
+                 <a href="{{ route('courrier.arrivee.historique', ['espace' => $espace]) }}" class="breadcrumb-item active">historique arrivee</a>
+                <a href="{{ route('courrier.arrive.phase2.form', ['espace' => $espace, 'id' => $courrier->id]) }}" class="breadcrumb-item active">
+  Phase de traitement
+</a>
 
+
+							</div>
+          
+
+							<a href="#breadcrumb_elements" class="btn btn-light align-self-center collapsed d-lg-none border-transparent rounded-pill p-0 ms-auto" data-bs-toggle="collapse">
+								<i class="ph-caret-down collapsible-indicator ph-sm m-1"></i>
+							</a>
+						</div>
+
+						<div class="collapse d-lg-block ms-lg-auto" id="breadcrumb_elements">
+							<div class="d-lg-flex mb-2 mb-lg-0">
+								
+
+								
+							</div>
+						</div>
+					</div>
+@endsection
 @section('content')
 <div class="choice-box">
     <h1>Phase 2 – Traitement du courrier : {{ $courrier->reference }}</h1>

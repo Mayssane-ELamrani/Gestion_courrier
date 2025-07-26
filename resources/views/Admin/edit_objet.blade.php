@@ -1,0 +1,73 @@
+@extends('layouts.adminStati')
+
+@section('title', 'Modifier un objet')
+
+@section('breadcrumb')
+<div class="page-header-content d-lg-flex border-top">
+    <div class="d-flex">
+        <div class="breadcrumb py-2">
+            <a href="{{ route('choix.espace') }}" class="breadcrumb-item" style="color: black">
+                <i class="fa fa-home"></i>
+            </a>
+            <a href="{{ route('gestion.admin') }}" class="breadcrumb-item active">Gestion administrative</a>
+            <a href="{{ route('admin.objet.liste') }}" class="breadcrumb-item active">Liste des objets</a>
+            <span class="breadcrumb-item active">Modifier un objet</span>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('content')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<div class="card">
+    <div class="card-header text-center">
+        <h1 class="title-profil d-inline-block">
+            <i class="fas fa-edit me-2"></i> Modifier un objet
+        </h1>
+    </div>
+
+    <div class="card-body">
+
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+            </div>
+        @endif
+
+        @if($errors->any())
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 30px;">
+            <h3 style="font-size: 18px; border-bottom: 2px solid #4AB9A7; padding-bottom: 8px; margin-bottom: 15px;">
+                ✏️ Modifier un objet
+            </h3>
+
+            <form method="POST" action="{{ route('admin.objet.update', $objet->id) }}" class="row g-3">
+                @csrf
+                @method('PUT')
+
+                <div class="col-md-12">
+                    <label for="nom" class="form-label">Nom de l'objet</label>
+                    <input type="text" id="nom" name="nom" class="form-control" value="{{ old('nom', $objet->nom) }}" required>
+                </div>
+
+                <div class="col-md-12 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save me-1"></i> Enregistrer les modifications
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+@endsection

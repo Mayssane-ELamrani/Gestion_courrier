@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CourrierDepart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\CourrierArrive;
@@ -26,7 +27,6 @@ class CourrierArriveController extends Controller
         $reponses = Reponse::all();
         $nextId = CourrierArrive::max('id') + 1;
 
-        // Récupération du courrier pour Phase 2 (si phase2 dans l'URL)
         $phase2Courrier = null;
         if (request()->has('phase2')) {
             $phase2Courrier = CourrierArrive::find(request('phase2'));
@@ -94,13 +94,13 @@ public function rechercheHistoriqueArrivee(Request $request, $espace)
     $query = CourrierArrive::with(['objet', 'etat', 'provenance'])
         ->where('type_espace', $espace);
 
-    // Si le search est un nombre, on suppose que c'est un ID direct
+    
     if (is_numeric($search)) {
         $courrier = $query->where('id', $search)->first();
 
         if ($courrier) {
             return view('courrier.historique_arrivee', [
-                'courriers' => collect([$courrier]), // Convertir en collection pour foreach
+                'courriers' => collect([$courrier]), 
                 'espace' => $espace,
                 'search' => $search,
                 'message' => null
@@ -115,7 +115,6 @@ public function rechercheHistoriqueArrivee(Request $request, $espace)
         }
     }
 
-    // Sinon, recherche normale par référence
     $courriers = $query->where('reference', 'like', "%$search%")
         ->orderByDesc('created_at')
         ->paginate(10);
@@ -149,43 +148,31 @@ public function rechercheHistoriqueArrivee(Request $request, $espace)
 
     }
 
-  public function historiqueArrivee($espace, Request $request)
-{
-    if (!in_array($espace, ['cmss', 'cmcas'])) {
-        abort(404);
-    }
+    public function historiqueArrivee($espace, Request $request)
+    {
+        if (!in_array($espace, ['cmss', 'cmcas'])) {
+            abort(404);
+        }
 
-    $search = trim($request->input('search'));
+        $query = CourrierArrive::with(['provenance', 'objet', 'etat'])
+            ->where('type_espace', $espace);
 
-    $query = CourrierArrive::with(['provenance', 'objet', 'etat'])
-        ->where('type_espace', $espace);
+        $search = trim($request->input('search'));
 
-    if ($search !== '') {
-        if (is_numeric($search)) {
-            // Recherche par ID (num d'ordre)
-            $query->where('id', $search);
-        } else {
-            // Recherche avancée
+        if ($search !== '') {
             $query->where(function ($q) use ($search) {
                 $q->where('reference', 'like', "%$search%")
                   ->orWhere('description_objet', 'like', "%$search%")
                   ->orWhereHas('provenance', function ($sub) use ($search) {
                       $sub->where('type', 'like', "%$search%");
-                  })
-                  ->orWhereHas('objet', function ($sub) use ($search) {
-                      $sub->where('nom', 'like', "%$search%");
-                  })
-                  ->orWhereHas('etat', function ($sub) use ($search) {
-                      $sub->where('nom', 'like', "%$search%");
                   });
             });
         }
+
+        $courriers = $query->orderBy('created_at', 'desc')->paginate(10);
+
+        return view('courrier.historique_arrivee', compact('espace', 'courriers', 'search'));
     }
-
-    $courriers = $query->orderBy('created_at', 'desc')->paginate(10);
-
-    return view('courrier.historique_arrivee', compact('espace', 'courriers', 'search'));
-}
 
  public function edit($id)
 {
@@ -229,7 +216,7 @@ public function rechercheHistoriqueArrivee(Request $request, $espace)
 
     $provenance = Provenance::find($request->provenance_id);
 
-    // Mise à jour des champs communs
+   
     $courrier->reference = $request->reference;
     $courrier->date_reception = $request->date_reception;
     $courrier->provenance_id = $request->provenance_id;
@@ -242,19 +229,19 @@ public function rechercheHistoriqueArrivee(Request $request, $espace)
     $courrier->date_envoi = $request->date_envoi;
 
     if ($provenance && strtolower($provenance->type) === 'agent') {
-        // Remplir agent, vider établissement
+       
         $courrier->agent_nom = $request->agent_nom;
         $courrier->agent_prenom = $request->agent_prenom;
         $courrier->agent_matricule = $request->agent_matricule;
         $courrier->etablissement_raison_sociale = null;
     } elseif ($provenance && strtolower($provenance->type) === 'etablissement') {
-        // Remplir établissement, vider agent
+       
         $courrier->etablissement_raison_sociale = $request->etablissement_raison_sociale;
         $courrier->agent_nom = null;
         $courrier->agent_prenom = null;
         $courrier->agent_matricule = null;
     } else {
-        // Aucun des deux, tout vider
+       
         $courrier->etablissement_raison_sociale = null;
         $courrier->agent_nom = null;
         $courrier->agent_prenom = null;
@@ -272,19 +259,33 @@ public function rechercheHistoriqueArrivee(Request $request, $espace)
         return view('courrier.ajouter_reference_depart', compact('courrier'));
     }
 
-    public function enregistrerReferenceDepart(Request $request, $id)
-    {
-        $request->validate([
-            'reference_courrierDepart' => 'required|string|max:255',
-        ]);
 
-        $courrier = CourrierArrive::findOrFail($id);
-        $courrier->reference_courrierDepart = $request->reference_courrierDepart;
-        $courrier->save();
+public function enregistrerReferenceDepart(Request $request, $id)
+{
+    $request->validate([
+        'reference_courrierDepart' => 'required|string|max:255',
+    ]);
 
-        return redirect()->route('courrier.arrivee.historique', ['espace' => $courrier->type_espace])
-            ->with('success', 'Référence de courrier départ ajoutée avec succès.');
+    $courrier = CourrierArrive::findOrFail($id);
+
+    
+    $exists = CourrierDepart::where('reference', $request->reference_courrierDepart)->exists();
+
+    if (!$exists) {
+        return back()
+            ->withErrors(['reference_courrierDepart' => 'La référence saisie ne correspond à aucun courrier de départ.'])
+            ->withInput();
     }
+
+   
+    $courrier->reference_courrierDepart = $request->reference_courrierDepart;
+    $courrier->save();
+
+    return redirect()->route('courrier.arrivee.historique', ['espace' => $courrier->type_espace])
+        ->with('success', 'Référence de courrier départ liée avec succès.');
+}
+
+
      public function details($espace, $id)
     {
         $courrier = CourrierArrive::with('provenance', 'objet', 'etat', 'reponse')->findOrFail($id);
@@ -292,4 +293,3 @@ public function rechercheHistoriqueArrivee(Request $request, $espace)
         return view('courrier.details', compact('courrier', 'espace'));
     }
 }
-

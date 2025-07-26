@@ -17,17 +17,39 @@ use App\Models\Departement;
 
 class UserController extends Controller
 {
+    public function superviseur()
+{
+    return view('superviseur.index');
+}
+
+public function indexUtilisateurs()
+{
+    if (Auth::user()->role !== 'admin') abort(403);
+    return view('admin.utilisateur_ajout');
+}
+
+public function listeUtilisateurs()
+{
+    if (Auth::user()->role !== 'admin') abort(403);
+    $utilisateurs = User::orderBy('nom_complet')->get();
+    return view('admin.utilisateurs_liste', compact('utilisateurs'));
+}
+
+
+
+
     public function storeUtilisateur(Request $request)
     {
         if (Auth::user()->role !== 'admin') abort(403);
 
         $request->validate([
-            'nom_complet' => 'required|string|max:255',
-            'email' => 'required|email|unique:personnes,email',
-            'matricule' => 'required|numeric|unique:personnes,matricule',
-            'role' => 'required|in:admin,user',
-            'password' => 'required|string|min:6',
-        ]);
+    'nom_complet' => 'required|string|max:255',
+    'email' => 'required|email|unique:personnes,email',
+    'matricule' => 'required|numeric|unique:personnes,matricule',
+    'role' => 'required|in:admin,user,supervisor',
+    'password' => 'required|string|min:6',
+]);
+
 
         User::create([
             'nom_complet' => $request->nom_complet,
@@ -37,25 +59,9 @@ class UserController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
-        return redirect()->route('gestion.admin')->with('success', 'Utilisateur ajouté avec succès.');
+        return redirect()->route('admin.utilisateur.index')->with('success', 'Utilisateur ajouté avec succès.');
     }
 
-    public function updateUtilisateur(Request $request, $id)
-    {
-        if (Auth::user()->role !== 'admin') abort(403);
-
-        $request->validate([
-            'nom_complet' => 'required|string|max:255',
-            'email' => 'required|email|unique:personnes,email,' . $id,
-        ]);
-
-        $utilisateur = User::findOrFail($id);
-        $utilisateur->nom_complet = $request->nom_complet;
-        $utilisateur->email = $request->email;
-        $utilisateur->save();
-
-        return redirect()->route('gestion.admin')->with('success', 'Utilisateur mis à jour avec succès.');
-    }
 
     public function deleteUtilisateur($id)
     {
@@ -64,7 +70,39 @@ class UserController extends Controller
         $utilisateur = User::findOrFail($id);
         $utilisateur->delete();
 
-        return redirect()->route('gestion.admin')->with('success', 'Utilisateur supprimé avec succès.');
+        return redirect()->route('admin.utilisateur.liste')->with('success', 'Utilisateur supprimé avec succès.');
     }
+    public function edit($id)
+{
+    $user = User::findOrFail($id);
+    return view('Admin.edit_user', compact('user'));
+}
+
+    public function update(Request $request, $id)
+{
+    $user = User::findOrFail($id);
+
+    $validated = $request->validate([
+        'nom_complet' => 'required|string|max:255',
+        'email' => 'required|email|unique:personnes,email,' . $id,
+        'matricule' => 'required|numeric',
+        'role' => 'required|in:user,admin,supervisor',
+        'password' => 'nullable|string|min:6',
+    ]);
+
+    $user->nom_complet = $validated['nom_complet'];
+    $user->email = $validated['email'];
+    $user->matricule = $validated['matricule'];
+    $user->role = $validated['role'];
+
+    if (!empty($validated['password'])) {
+        $user->password = bcrypt($validated['password']);
+    }
+
+    $user->save();
+
+    return redirect()->route('admin.utilisateur.liste')->with('success', 'Utilisateur mis à jour avec succès.');
+}
+
 
 }

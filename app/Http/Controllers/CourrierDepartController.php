@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CourrierArrive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\CourrierDepart;
@@ -56,12 +57,12 @@ public function historiqueDepart(Request $request, $espace)
     $search = $request->query('search');
 
     if ($search) {
-        // Cherche uniquement le courrier dont la référence correspond exactement à la recherche
+       
         $courriers = CourrierDepart::where('reference', $search)
             ->where('type_espace', $espace)
             ->paginate(10);
     } else {
-        // Sinon affiche tout
+       
         $courriers = CourrierDepart::where('type_espace', $espace)
             ->orderBy('created_at', 'desc')
             ->paginate(10);
@@ -115,62 +116,81 @@ public function historiqueDepart(Request $request, $espace)
     }
 
     public function enregistrerReferenceArrivee(Request $request, $id)
-    {
-        $request->validate([
-            'reference_courrierArrive' => 'required|string|max:255',
-        ]);
+{
+    $request->validate([
+        'reference_courrierArrive' => 'required|string|max:255',
+    ]);
 
-        $courrier = CourrierDepart::findOrFail($id);
-        $courrier->reference_courrierArrive = $request->reference_courrierArrive;
-        $courrier->save();
+    // Vérifier si la référence existe dans courrier_arrives
+    $referenceArrive = $request->input('reference_courrierArrive');
 
-        return redirect()->route('courrier.depart.historique', ['espace' => $courrier->type_espace])
-            ->with('success', 'La référence a été liée avec succès.');
+    $courrierArrive = CourrierArrive::where('reference', $referenceArrive)->first();
+
+    if (!$courrierArrive) {
+        // Retour avec erreur si non trouvée
+        return redirect()->back()
+            ->withInput()
+            ->withErrors(['reference_courrierArrive' => "La référence '$referenceArrive' n'existe pas dans les courriers d'arrivée."]);
     }
 
-    public function edit($id)
-    {
-        $courrier = CourrierDepart::findOrFail($id);
-        $departements = Departement::all();
-        $objets = Objet::all();
-        $etats = Etat::all();
+  
+    $courrier = CourrierDepart::findOrFail($id);
+    $courrier->reference_courrierArrive = $referenceArrive;
+    $courrier->save();
 
-        return view('courrier.edit_depart', compact('courrier', 'departements', 'objets', 'etats'));
-    }
+    return redirect()->route('courrier.depart.historique', ['espace' => $courrier->type_espace])
+        ->with('success', 'La référence a été liée avec succès.');
+}
+
+   public function edit($id)
+{
+    $courrier = CourrierDepart::findOrFail($id);
+    $departements = Departement::all();
+    $objets = Objet::all();
+    $etats = Etat::all();
+
+    $espace = $courrier->type_espace; 
+
+    return view('courrier.edit_depart', compact('courrier', 'departements', 'objets', 'etats', 'espace'));
+}
+
+
 
     public function update(Request $request, $id)
-    {
-        try {
-            $courrier = CourrierDepart::findOrFail($id);
+{
+    try {
+        $courrier = CourrierDepart::findOrFail($id);
 
-            \Log::info('Form submission data:', $request->all());
+        \Log::info('Form submission data:', $request->all());
 
-            $validated = $request->validate([
-                'reference' => 'required|string|max:255',
-                'date_envoi' => 'required|date',
-                'destinataire' => 'required|string|max:255',
-                'departement_source_id' => 'nullable|exists:departements,id',
-                'objet_id' => 'nullable|exists:objets,id',
-                'description_objet' => 'nullable|string',
-                'type_source' => 'required|string',
-                'nom_agent' => 'nullable|string|max:255',
-                'etat_id' => 'nullable|exists:etats,id',
-            ]);
+        $validated = $request->validate([
+    'reference' => 'required|string|max:255',
+    'date_envoi' => 'required|date',
+    'destinataire' => 'required|string|max:255',
+    'departement_source_id' => 'nullable|exists:departements,id',
+    'objet_id' => 'nullable|exists:objets,id',
+    'description_objet' => 'nullable|string',
+    'type_source' => 'required|string', // ici changement
+    'nom_agent' => 'nullable|string|max:255',
+    'etat_id' => 'nullable|exists:etats,id',
+]);
 
-            if ($validated['type_source'] === 'agent') {
-                $validated['departement_source_id'] = null;
-            } elseif ($validated['type_source'] === 'departement') {
-                $validated['nom_agent'] = null;
-            }
+if ($validated['type_source'] === 'agent') {
+    $validated['departement_source_id'] = null;
+} elseif ($validated['type_source'] === 'departement') {
+    $validated['nom_agent'] = null;
+}
 
-            $courrier->update($validated);
 
-            return redirect()->route('courrier.depart.historique', ['espace' => $courrier->type_espace])
-                ->with('success', 'Courrier mis à jour avec succès.');
+        $courrier->update($validated);
 
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            \Log::error('Validation failed:', $e->errors());
-            return redirect()->back()->withErrors($e->errors())->withInput();
-        }
+        return redirect()->route('courrier.depart.historique', ['espace' => $courrier->type_espace])
+            ->with('success', 'Courrier mis à jour avec succès.');
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        \Log::error('Validation failed:', $e->errors());
+        return redirect()->back()->withErrors($e->errors())->withInput();
     }
+}
+
 }

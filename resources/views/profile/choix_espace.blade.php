@@ -64,6 +64,19 @@
     </div>
     @endif
 
+    <!-- Espace superviseur -->
+   @if(auth()->user()->isSupervisor())
+  <div class="col-md-6 col-lg-4 mb-4">
+    <div class="card bg-success text-white text-center shadow-lg">
+      <div class="card-body py-5">
+        <h4 class="card-title mb-3">👨‍🏫 Espace superviseur</h4>
+        <a href="{{ route('gestion.superviseur') }}" class="btn btn-light">Accéder</a>
+      </div>
+    </div>
+  </div>
+@endif
+
+
   </div>
 
   <footer class="mt-5 text-center text-muted">

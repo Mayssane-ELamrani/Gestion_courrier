@@ -17,6 +17,24 @@ use App\Models\Departement;
 
 class DepartementController extends Controller
 {
+    public function listeDepartements()
+{
+    if (Auth::user()->role !== 'admin') abort(403);
+
+    $departements = Departement::all()->sortBy('nom'); // Tri alphabétique
+
+    return view('admin.departements_liste', compact('departements'));
+}
+
+    public function indexDepartements()
+{
+    if (Auth::user()->role !== 'admin') abort(403);
+
+    $departements = Departement::all();
+
+    return view('admin.departements_ajout', compact('departements'));
+}
+
      public function storeDepartement(Request $request)
     {
         if (Auth::user()->role !== 'admin') abort(403);
@@ -29,23 +47,10 @@ class DepartementController extends Controller
             'nom' => $request->nom,
         ]);
 
-        return redirect()->route('gestion.admin')->with('success', 'Département ajouté avec succès.');
+        return redirect()->route('admin.departement.index')->with('success', 'Département ajouté avec succès.');
     }
 
-    public function updateDepartement(Request $request, $id)
-    {
-        if (Auth::user()->role !== 'admin') abort(403);
-
-        $request->validate([
-            'nom' => 'required|string|unique:departements,nom,' . $id . '|max:255',
-        ]);
-
-        $departement = Departement::findOrFail($id);
-        $departement->nom = $request->nom;
-        $departement->save();
-
-        return redirect()->route('gestion.admin')->with('success', 'Département mis à jour avec succès.');
-    }
+   
 
     public function deleteDepartement($id)
     {
@@ -54,7 +59,26 @@ class DepartementController extends Controller
         $departement = Departement::findOrFail($id);
         $departement->delete();
 
-        return redirect()->route('gestion.admin')->with('success', 'Département supprimé avec succès.');
+        return redirect()->route('admin.departement.liste')->with('success', 'Département supprimé avec succès.');
+    }
+    
+    public function edit($id)
+    {
+        $departement = Departement::findOrFail($id);
+        return view('Admin.edit_dept', compact('departement'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nom' => 'required|string|max:255',
+        ]);
+
+        $departement = Departement::findOrFail($id);
+        $departement->nom = $request->nom;
+        $departement->save();
+
+        return redirect()->route('admin.departement.liste')->with('success', 'Département modifié avec succès.');
     }
 
 }

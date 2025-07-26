@@ -9,6 +9,11 @@ use App\Http\Controllers\CourrierController;
 use App\Http\Controllers\CourrierDepartController;
 use App\Http\Controllers\CourrierArriveController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\DepartementController;
+use App\Http\Controllers\ObjetController;
+use App\Http\Controllers\supervisorController;
+
 
 
 Route::get('/login', function () {
@@ -80,27 +85,51 @@ Route::get('/courrier-arrive/{id}/ajouter-reference-depart', [CourrierArriveCont
     Route::get('/courrier/{espace}/{type}', [CourrierController::class, 'index'])->name('courrier.index');
 
     
-    Route::prefix('admin')->group(function () {
-        Route::get('/', [AdminController::class, 'admin'])->name('gestion.admin');
-       
-     
+ Route::prefix('admin')->group(function () {
+    Route::get('/', [AdminController::class, 'admin'])->name('gestion.admin');
 
-        Route::put('/utilisateur/{id}', [AdminController::class, 'updateUtilisateur'])->name('admin.utilisateur.update');
-        Route::delete('/utilisateur/{id}', [AdminController::class, 'deleteUtilisateur'])->name('admin.utilisateur.delete');
-        Route::post('/utilisateur/store', [AdminController::class, 'storeUtilisateur'])->name('admin.utilisateur.store');
+Route::get('/utilisateur', [UserController::class, 'indexUtilisateurs'])->name('admin.utilisateur.index'); 
+Route::get('/utilisateur/liste', [UserController::class, 'listeUtilisateurs'])->name('admin.utilisateur.liste'); 
 
-       
-        Route::post('/departement/store', [AdminController::class, 'storeDepartement'])->name('admin.departement.store');
-        Route::put('/departement/{id}', [AdminController::class, 'updateDepartement'])->name('admin.departement.update');
-        Route::delete('/departement/{id}', [AdminController::class, 'deleteDepartement'])->name('admin.departement.delete');
-       
-      
-        Route::post('/objet/store', [AdminController::class, 'storeObjet'])->name('admin.objet.store');
-        Route::put('/objet/{id}', [AdminController::class, 'updateObjet'])->name('admin.objet.update');
-        Route::delete('/objet/{id}', [AdminController::class, 'deleteObjet'])->name('admin.objet.delete');
-    });
+Route::post('/utilisateur/store', [UserController::class, 'storeUtilisateur'])->name('admin.utilisateur.store');
+Route::put('/utilisateur/{id}', [UserController::class, 'updateUtilisateur'])->name('admin.utilisateur.update');
+Route::delete('/utilisateur/{id}', [UserController::class, 'deleteUtilisateur'])->name('admin.utilisateur.delete');
+
+    Route::get('/departement', [DepartementController::class, 'indexDepartements'])->name('admin.departement.index'); //
+   
+Route::get('/departement/liste', [DepartementController::class, 'listeDepartements'])->name('admin.departement.liste'); // liste seule
+
+Route::post('/departement/store', [DepartementController::class, 'storeDepartement'])->name('admin.departement.store');
+Route::put('/departement/{id}', [DepartementController::class, 'updateDepartement'])->name('admin.departement.update');
+Route::delete('/departement/{id}', [DepartementController::class, 'deleteDepartement'])->name('admin.departement.delete');
+
+
+    Route::get('/objet', [ObjetController::class, 'indexObjets'])->name('admin.objet.index');
+Route::get('/objet/liste', [ObjetController::class, 'listeObjets'])->name('admin.objet.liste');
+Route::post('/objet/store', [ObjetController::class, 'storeObjet'])->name('admin.objet.store');
+Route::put('/objet/{id}', [ObjetController::class, 'updateObjet'])->name('admin.objet.update');
+Route::delete('/objet/{id}', [ObjetController::class, 'deleteObjet'])->name('admin.objet.delete');
+
+
+Route::get('/admin/utilisateurs/{id}/edit', [UserController::class, 'edit'])->name('admin.utilisateur.edit');
+Route::put('/admin/utilisateurs/{id}', [UserController::class, 'update'])->name('admin.utilisateur.update');
+Route::get('/admin/objet/edit/{id}', [ObjetController::class, 'edit'])->name('admin.objet.edit');
+Route::put('/admin/objet/update/{id}', [ObjetController::class, 'update'])->name('admin.objet.update');
+Route::get('departement/{id}/edit', [DepartementController::class, 'edit'])->name('admin.departement.edit');
+Route::put('departement/{id}', [DepartementController::class, 'update'])->name('admin.departement.update');
+});
+
  Route::get('/admin', [AdminController::class, 'index'])->name('gestion.admin');
+  Route::get('/superviseur', [supervisorController::class, 'supervisor'])->name('gestion.superviseur');
  
+Route::get('/admin/utilisateurs/{id}/edit', [UserController::class, 'edit'])->name('admin.utilisateur.edit');
+Route::put('/admin/utilisateurs/{id}', [UserController::class, 'update'])->name('admin.utilisateur.update');
+Route::get('/admin/objet/edit/{id}', [ObjetController::class, 'edit'])->name('admin.objet.edit');
+Route::put('/admin/objet/update/{id}', [ObjetController::class, 'update'])->name('admin.objet.update');
+Route::get('departement/{id}/edit', [DepartementController::class, 'edit'])->name('admin.departement.edit');
+Route::put('departement/{id}', [DepartementController::class, 'update'])->name('admin.departement.update');
+
+
 });
 
 
